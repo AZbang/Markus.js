@@ -3,19 +3,16 @@
   "version": "0.1.0",
   "main": "lib/markus.js",
   "directories": {
-    "examples": "examples"
+    "examples": "example"
   },
   "author": "azbang",
   "license": "ISC",
   "scripts": {
     "build": "webpack --env dev && webpack --env build && npm run test",
     "dev": "webpack --progress --colors --watch --env dev",
-    "examples": "http-server ./ -c-1 -o",
+    "examples": "http-server ./ -o -c-1",
     "test": "mocha --require babel-register --colors ./test/*.spec.js",
     "test:watch": "mocha --require babel-register --colors -w ./test/*.spec.js"
-  },
-  "dependencies": {
-    "pixi.js": "^4.8.2"
   },
   "files": [
     "dist",

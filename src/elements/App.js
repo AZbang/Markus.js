@@ -1,17 +1,18 @@
 export default class App extends PIXI.Application {
-  constructor(markus, props, presets) {
+  constructor(markus, data) {
     super({
-      backgroundColor: props.color || 0x000000,
+      backgroundColor: data.props.color || 0x000000,
       width: window.innerWidth,
       height: window.innerHeight
     });
     document.body.appendChild(this.view);
+    document.body.style = "padding: 0; margin: 0; overflow: hidden; background: #000;";
 
     this.resolution = null;
-    this.w = props.w || 1920;
-    this.h = props.h || 700;
+    this.w = data.props.w || 1920;
+    this.h = data.props.h || 700;
 
-    this.stage.addChild.apply(this.stage, markus.activatePresets(presets));
+    data.presets.length && this.stage.addChild.apply(this.stage, markus.activatePresets(data.presets));
     window.addEventListener('resize', () => this.resize(this));
     this.resize();
   }

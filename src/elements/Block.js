@@ -1,7 +1,7 @@
 export default class Block extends PIXI.Container {
-  constructor(markus, props, presets) {
+  constructor(markus, data) {
     super();
 
-    this.addChild.apply(this, markus.activatePresets(presets));
+    data.presets.length && this.addChild.apply(this, markus.activatePresets(data.presets));
   }
 }

@@ -5,15 +5,20 @@ export default class Markus {
   constructor(filepath, elements={}) {
     this.filepath = filepath;
     this.filename = filepath.split('/').slice(-1)[0];
+    this.lines = [];
 
+    this.parser = new MarkusParser(this);
     this.elements = Object.assign(markusElements, elements);
+    this.flatPresets = [];
     this.presets = [];
     this.roots = [];
   }
   load(onReady) {
     PIXI.loader.add(this.filepath).load((loader, res) => {
-      this.presets = new MarkusParser(res[this.filename].data);
-      // this.roots.push(this.activatePresets(this.presets));
+      this.lines = res[this.filename].data.split('\n');
+      this.flatPresets = this.parser.parsePresets(this.lines);
+      this.presets = this.parser.generateTree(this.flatPresets);
+      this.roots.push(this.activatePresets(this.presets));
       onReady && onReady(this);
     });
   }
