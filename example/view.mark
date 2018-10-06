@@ -1,0 +1,29 @@
+resources
+  'assets/sprite.png'
+
+app
+  scenes
+    menu
+      text(x=100, y=300, size=24, font='Roboto') 'MENU'
+      sprite(x=200, y=344, w=100, h=300, anchorX=.5, anchorY=.5) 'sprite.png'
+
+    playground
+      text 'MENU'
+      sprite 'sprite.png'
+
+// view
+//   scenes
+//     menu
+//       image(src='bg.png').bg
+//
+//       text GAME
+//       button(@click=toPlayground) START
+//       button(@click=toExit) EXIT
+//
+//     playground
+//       camera
+//         image.bg(src='bg2.png' fixedCamera)
+//         tiled(src=level)
+//         joystick(@joy=playerMove)
+//
+//         rect(angle=rectAngle)

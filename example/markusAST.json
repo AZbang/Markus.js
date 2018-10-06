@@ -1,0 +1,32 @@
+[
+  {
+    "element": "resources",
+    "props": {
+      "map1": "assets/map1.json"
+    }
+  },
+  {
+    "element": "app",
+    "props": {
+      "w": 1920,
+      "h": 980
+    },
+    "presets": [{
+      "element": "scenes",
+      "props": {
+        "w": 100,
+        "h": 100,
+        "scaleX": 1
+      },
+      "presets": [
+        {
+          "element": "menu",
+          "id": "menu",
+          "tags": ["scene"],
+          "props": {},
+          "presets": []
+        }
+      ]
+    }]
+  }
+]
