@@ -1,20 +1,3 @@
-import MarkusApp from './MarkusApp'
-import Resources from './Resources'
-import Block from './Block'
-
-export default {
-  app: MarkusApp,
-  resources: Resources,
-  block: Block
-
-  // scenes: Scenes,
-  // tiledmap: TiledMap,
-  //
-  // sprite: Sprite,
-  // text: Text,
-  //
-  // rect: GraphicRect,
-  // circle: GraphicCircle,
-  // polygon: GraphicPolygon,
-  // line: GraphicLine
-}
+export { default as app } from './App';
+export { default as resources } from './Resources';
+export { default as block } from './Block';

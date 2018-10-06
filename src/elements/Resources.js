@@ -1,6 +1,4 @@
-import PIXI from 'pixi.js'
-
-export default class Resources extends PIXI.Loader {
+export default class Resources extends PIXI.loaders.Loader {
   constructor(markus, props) {
     super();
 

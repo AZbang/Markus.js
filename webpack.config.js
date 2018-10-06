@@ -24,19 +24,19 @@ const config = {
   output: {
     path: __dirname + '/lib',
     filename: outputFile,
-    library: libraryName,
+    library: 'Markus',
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
-  // module: {
-  //   rules: [
-  //     {
-  //       test: /(\.jsx|\.js)$/,
-  //       loader: 'babel-loader',
-  //       exclude: /(node_modules|bower_components)/
-  //     }
-  //   ]
-  // },
+  module: {
+    rules: [
+      {
+        test: /(\.jsx|\.js)$/,
+        loader: 'babel-loader',
+        exclude: /(node_modules|bower_components)/
+      }
+    ]
+  },
   resolve: {
     modules: [path.resolve('./node_modules'), path.resolve('./src')],
     extensions: ['.json', '.js']

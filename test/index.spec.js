@@ -1,0 +1,3 @@
+import MarkusParser from '../src/parser';
+
+// tests...

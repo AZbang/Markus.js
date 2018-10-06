@@ -1,5 +1,3 @@
-import PIXI from 'pixi.js'
-
 export default class Block extends PIXI.Container {
   constructor(markus, props, presets) {
     super();

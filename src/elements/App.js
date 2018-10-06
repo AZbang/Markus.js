@@ -1,5 +1,3 @@
-import PIXI from 'pixi.js'
-
 export default class App extends PIXI.Application {
   constructor(markus, props, presets) {
     super({

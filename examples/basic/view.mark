@@ -1,0 +1,12 @@
+resources
+  assets/sprite.png
+
+app
+  scenes
+    menu
+      text(x=100, y=300, size=24, font=Roboto) MENU
+      sprite(x=200, y=344, w=100, h=300, anchorX=.5, anchorY=.5) sprite.png
+
+    playground
+      text MENU
+      sprite sprite.png

@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "main": "lib/markus.js",
   "directories": {
-    "example": "example"
+    "examples": "examples"
   },
   "author": "azbang",
   "license": "ISC",
   "scripts": {
     "build": "webpack --env dev && webpack --env build && npm run test",
     "dev": "webpack --progress --colors --watch --env dev",
+    "examples": "http-server ./ -c-1 -o",
     "test": "mocha --require babel-register --colors ./test/*.spec.js",
     "test:watch": "mocha --require babel-register --colors -w ./test/*.spec.js"
   },
@@ -30,6 +31,7 @@
     "babel-preset-env": "^7.0.0-beta.3",
     "babel-register": "^7.0.0-beta.3",
     "chai": "^4.1.2",
+    "http-server": "^0.11.1",
     "mocha": "^4.0.1",
     "uglifyjs-webpack-plugin": "^1.2.7",
     "webpack": "^4.12.2",
