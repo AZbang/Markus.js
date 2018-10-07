@@ -1,9 +1,10 @@
 export default class Resources extends PIXI.loaders.Loader {
-  constructor(markus, props) {
+  constructor(markus, data) {
     super();
+    markus.addRoot(this);
 
-    for(let key in props) {
-      this.add(key, props[key]);
+    for(let key in data.props) {
+      this.add(key, data.props[key]);
     }
   }
 }

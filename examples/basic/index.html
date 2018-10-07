@@ -12,7 +12,13 @@
 
   <script>
     var mark = new Markus('view.mark');
-    mark.load();
+    mark.load(() => {
+      console.log(mark.roots)
+      console.log(mark.get('resources'))
+      mark.get('resources').load(() => {
+        mark.get('app').startRender();
+      });
+    });
   </script>
 </body>
 </html>

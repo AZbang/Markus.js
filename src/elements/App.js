@@ -8,13 +8,19 @@ export default class App extends PIXI.Application {
     document.body.appendChild(this.view);
     document.body.style = "padding: 0; margin: 0; overflow: hidden; background: #000;";
 
-    this.resolution = null;
-    this.w = data.props.w || 1920;
-    this.h = data.props.h || 700;
+    this.markus = markus;
+    this.presets = data.presets;
+    this.markus.addRoot(this);
 
-    data.presets.length && this.stage.addChild.apply(this.stage, markus.activatePresets(data.presets));
+    this.resolution = null;
+    this.w = data.props.w || 1280;
+    this.h = data.props.h || 720;
+
     window.addEventListener('resize', () => this.resize(this));
     this.resize();
+  }
+  startRender() {
+    this.presets.length && this.stage.addChild.apply(this.stage, this.markus.activatePresets(this.presets));
   }
   resize() {
     this.resolution = window.innerWidth/this.w;
