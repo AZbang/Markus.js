@@ -56,6 +56,8 @@ export default class Markus {
 
   // presets
   activatePreset(preset) {
+    console.log(preset)
+
     let elm = new this.elements[preset.element](this, preset);
     elm.element = preset.element;
     elm.id = preset.id;

@@ -14,11 +14,26 @@ export default class MarkusParser {
           if(presets[j].depth < presets[i].depth) {
 
             if(presets[i].type === 'valueNode') {
-              presets[j].value = presets[i].value + (presets[j].value ? '\n' + presets[j].value : '');
+              if(presets[j].type === 'elementNode')
+                presets[j].value = presets[i].value + (presets[j].value ? '\n' + presets[j].value : '');
+              else if(presets[j].type === 'propNode') {
+                if(presets[j].value === true) presets[j].value = '';
+                presets[j].value = presets[i].value + (presets[j].value ? '\n' + presets[j].value : '');
+              } else throw Error('valueNode cannot be a child of a ' + presets[j].type);
             }
 
-            else if(presets[j].type === 'elementNode') {
-              presets[j].presets.unshift(presets[i]);
+            if(presets[i].type === 'propNode') {
+              if(presets[j].type === 'propNode') {
+                if(typeof presets[i].value !== 'object') presets[i].value = {value: presets[i].value};
+                Object.assign(presets[j].value, {[presets[i].name]: presets[i].value})
+              } else if(presets[j].type === 'elementNode') {
+                Object.assign(presets[j].props, {[presets[i].name]: presets[i].value})
+              } else throw Error('propNode cannot be a child of a ' + presets[j].type);
+            }
+
+            else if(presets[i].type === 'elementNode') {
+              if(presets[j].type === 'elementNode') presets[j].presets.unshift(presets[i]);
+              else throw Error('elementNode cannot be a child of a ' + presets[j].type);
             }
 
             break;
@@ -38,22 +53,34 @@ export default class MarkusParser {
   }
   parseLine(line) {
     let type = 'elementNode';
-    let element = this.getElement(line);
     let depth = this.getDepth(line);
+
+    // if line is attr node
+    let attr = this.getAttr(line);
+    if(attr) {
+      type = 'propNode';
+      return {type, depth, name: attr[0], value: attr[1]}
+    }
+
+    // else line is element, empty or value node
+    let element = this.getElement(line);
     let tags = this.getTags(line);
     let value = this.getValue(line);
     let id = this.getId(line);
     let props = [];
 
+    // if element is undefined, then line is block or value node
     if(element == null) {
       if(tags.length || id) element = 'block';
       else if(value) type = 'valueNode';
       else return;
     }
 
+    // if line is elementNode, then parse props
     if(type !== 'valueNode') {
       props = this.getProps(line);
     }
+
     return {type, element, value, props, tags, id, depth, presets: []};
   }
   getDepth(line) {
@@ -76,6 +103,10 @@ export default class MarkusParser {
   }
   getValue(line) {
     return (line.match(/\| *(.+)/) || [])[1] || '';
+  }
+  getAttr(line) {
+    let prop = line.match(/^[\t ]*@(\w+)(\s(.+))?/);
+    if(prop) return [prop[1], prop[3] != null ? parseValue(prop[3]) : true]
   }
   getProps(line) {
     let res = {};

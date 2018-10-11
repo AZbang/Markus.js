@@ -1,10 +1,19 @@
-resources(cat=sprites.json)
+resources
+  @cat sprites.json
+
 
 app(color=0x50B2FF, w=1920, h=1080)
-  text(font=Bebas Neue, size=100, centerX, anchor=0.5, y=250, color=#fff)
-    | STICKERS WITH CAT :3
+  text | STICKERS WITH CAT :3
+    @font Bebas Neue
+    @size 100
+    @centerX
+    @anchor 0.5
+    @y 250
+    @color #fff
 
   block#playground(scale=1.5, x=-500)
+    | STICKERS WITH CAT :3
+
     sprite.sticker.top(texture=cat7.png, w=128, h=128, anchor=.5, centerX, marginX=-300, y=350)
     sprite.sticker.top(texture=cat.png, w=128, h=128, anchor=0.5, centerX, marginX=-150, y=350)
     sprite.sticker(texture=cat2.png, w=128, h=128, anchor=.5, centerX, y=350)
