@@ -56,10 +56,11 @@ export default class Markus {
 
   // presets
   activatePreset(preset) {
-    console.log(preset)
+    if(preset.type !== 'elementNode') throw Error('Preset cannot be activate. His type is not elementNode');
 
-    let elm = new this.elements[preset.element](this, preset);
-    elm.element = preset.element;
+    this.get('styles') && Object.assign(preset.props, this.get('styles').get(preset));
+    let elm = new this.elements[preset.element || 'block'](this, preset);
+    elm.element = preset.element || 'block';
     elm.id = preset.id;
     elm.tags = preset.tags;
     return elm;
@@ -74,25 +75,22 @@ export default class Markus {
   }
 
   // find objects
-  get(queryStr) {
-    let q = this.parser.parseQuery(queryStr);
+  get(selector) {
+    let q = this.parser.parseQuery(selector);
     return this.find(q, this.roots);
   }
-  getAll(queryStr) {
-    let q = this.parser.parseQuery(queryStr);
+  getAll(selector) {
+    let q = this.parser.parseQuery(selector);
     return this.find(q, this.roots, true);
   }
   find(q, elms=[], isAll=false) {
     let res = [];
     for(let i = 0; i < elms.length; i++) {
-      let isEl = q.element ? q.element === elms[i].element : true;
-      let isId = q.id ? q.id === elms[i].id : true;
-      let isTags = isSubsetArray(elms[i].tags, q.tags);
-
-      if(isEl && isId && isTags) {
+      if(this.isSelectorOfElement(q, elms[i])) {
         if(isAll) res.push(elms[i]);
         else return elms[i];
       }
+
       if(elms[i].children || elms[i].stage) {
         let find = this.find(q, elms[i].children || elms[i].stage.children, isAll);
         if(!isAll && find) return find;
@@ -100,5 +98,12 @@ export default class Markus {
       }
     }
     return isAll ? res : null;
+  }
+  isSelectorOfElement(q, elm) {
+    let isEl = q.element ? q.element === elm.element : true;
+    let isId = q.id ? q.id === elm.id : true;
+    let isTags = isSubsetArray(elm.tags, q.tags);
+
+    return isEl && isId && isTags;
   }
 }

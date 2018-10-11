@@ -24,7 +24,7 @@ export default class MarkusParser {
 
             if(presets[i].type === 'propNode') {
               if(presets[j].type === 'propNode') {
-                if(typeof presets[i].value !== 'object') presets[i].value = {value: presets[i].value};
+                if(typeof presets[j].value !== 'object') presets[j].value = {value: presets[j].value};
                 Object.assign(presets[j].value, {[presets[i].name]: presets[i].value})
               } else if(presets[j].type === 'elementNode') {
                 Object.assign(presets[j].props, {[presets[i].name]: presets[i].value})
@@ -71,7 +71,7 @@ export default class MarkusParser {
 
     // if element is undefined, then line is block or value node
     if(element == null) {
-      if(tags.length || id) element = 'block';
+      if(tags.length || id) element = '';
       else if(value) type = 'valueNode';
       else return;
     }
