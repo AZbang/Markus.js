@@ -1,17 +1,18 @@
 resources(cat=sprites.json)
 
 app(color=0x50B2FF, w=1920, h=1080)
-  block(scale=1.5, x=-500)
-    text(font=Bebas Neue, size=60, centerX, anchor=0.5, y=200, color=#fff) STICKERS WITH CAT :3
+  text(font=Bebas Neue, size=100, centerX, anchor=0.5, y=250, color=#fff)
+    | STICKERS WITH CAT :3
 
-    sprite(texture=cat7.png, w=128, h=128, anchor=.5, centerX, marginX=-300, y=350)
-    sprite(texture=cat.png, w=128, h=128, anchor=0.5, centerX, marginX=-150, y=350)
-    sprite(texture=cat2.png, w=128, h=128, anchor=.5, centerX, y=350, angle=30)
-    sprite(texture=cat3.png, w=128, h=128, anchor=.5, centerX, marginX=150, y=350)
-    sprite(texture=cat8.png, w=128, h=128, anchor=.5, centerX, marginX=300, y=350)
+  block#playground(scale=1.5, x=-500)
+    sprite.sticker.top(texture=cat7.png, w=128, h=128, anchor=.5, centerX, marginX=-300, y=350)
+    sprite.sticker.top(texture=cat.png, w=128, h=128, anchor=0.5, centerX, marginX=-150, y=350)
+    sprite.sticker(texture=cat2.png, w=128, h=128, anchor=.5, centerX, y=350)
+    sprite.sticker(texture=cat3.png, w=128, h=128, anchor=.5, centerX, marginX=150, y=350)
+    sprite.sticker(texture=cat8.png, w=128, h=128, anchor=.5, centerX, marginX=300, y=350)
 
-    sprite(texture=cat9.png, w=128, h=128, anchor=0.5, centerX, marginX=-300, y=500)
-    sprite(texture=cat4.png, w=128, h=128, anchor=0.5, centerX, marginX=-150, y=500)
-    sprite(texture=cat5.png, w=128, h=128, anchor=.5, centerX, y=500)
-    sprite(texture=cat6.png, w=128, h=128, anchor=.5, centerX, marginX=150, y=500)
-    sprite(texture=cat10.png, w=128, h=128, anchor=0.5, centerX, marginX=300, y=500)
+    sprite.sticker(texture=cat9.png, w=128, h=128, anchor=0.5, centerX, marginX=-300, y=500)
+    sprite.sticker(texture=cat4.png, w=128, h=128, anchor=0.5, centerX, marginX=-150, y=500)
+    sprite.sticker(texture=cat5.png, w=128, h=128, anchor=.5, centerX, y=500)
+    sprite.sticker(texture=cat6.png, w=128, h=128, anchor=.5, centerX, marginX=150, y=500)
+    sprite.sticker(texture=cat10.png, w=128, h=128, anchor=0.5, centerX, marginX=300, y=500)

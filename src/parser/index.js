@@ -12,13 +12,21 @@ export default class MarkusParser {
       if(presets[i].depth !== 0) {
         for(let j = i-1; j >= 0; j--) {
           if(presets[j].depth < presets[i].depth) {
-            presets[j].presets.push(presets[i]);
+
+            if(presets[i].type === 'valueNode') {
+              presets[j].value = presets[i].value + (presets[j].value ? '\n' + presets[j].value : '');
+            }
+
+            else if(presets[j].type === 'elementNode') {
+              presets[j].presets.unshift(presets[i]);
+            }
+
             break;
           }
         }
       } else tree.push(presets[i]);
     }
-    return tree;
+    return   tree;
   }
   parsePresets(lines) {
     let presets = [];
@@ -29,34 +37,36 @@ export default class MarkusParser {
     return presets;
   }
   parseLine(line) {
+    let type = 'elementNode';
     let element = this.getElement(line);
-    if(element == null) return;
-
     let depth = this.getDepth(line);
-    let props = this.getProps(line);
     let tags = this.getTags(line);
     let value = this.getValue(line);
     let id = this.getId(line);
+    let props = [];
 
-    return {element, value, props, tags, id, depth, presets: []};
+    if(element == null) {
+      if(tags.length || id) element = 'block';
+      else if(value) type = 'valueNode';
+      else return;
+    }
+
+    if(type !== 'valueNode') {
+      props = this.getProps(line);
+    }
+    return {type, element, value, props, tags, id, depth, presets: []};
   }
   getDepth(line) {
-    let chars = line.split('');
-    let depth = 0;
-
-    for(let i = 0; i < chars.length; i++) {
-      if(chars[i] !== ' ') return depth/2;
-      depth++;
-    }
+    return (line.match(/^[\t ]+/) || [''])[0].length/2;
   }
   parseQuery(query) {
-    let tags = (query.match(/\.\w+/) || []).map((tag) => tag.slice(1));
+    let tags = (query.match(/\.\w+/g) || []).map((tag) => tag.slice(1));
     let id = (query.match(/\#\w+/) || [''])[0].slice(1);
     let element = (query.match(/^\w+/) || [])[0];
     return {element, id, tags}
   }
   getElement(line) {
-    return (line.match(/\w+/) || [])[0];
+    return (line.match(/^[\t ]*(\w+)/) || [])[1];
   }
   getTags(line) {
     return (line.replace(/\(.+\)/, '').match(/\.\w+/g) || []).map((tag) => tag.slice(1));
@@ -65,7 +75,7 @@ export default class MarkusParser {
     return (line.replace(/\(.+\)/, '').match(/#\w+/) || [''])[0].slice(1);
   }
   getValue(line) {
-    return line.replace(/\(.+\)/, '').replace(/\w+/, '').replace(/ +/, '');
+    return (line.match(/\| *(.+)/) || [])[1] || '';
   }
   getProps(line) {
     let res = {};
