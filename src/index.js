@@ -5,8 +5,8 @@ import {isSubsetArray} from './utils'
 export default class Markus {
   constructor(filepath, elements={}) {
     this.filepath = filepath;
-    this.filename = filepath.split('/').slice(-1)[0];
     this.lines = [];
+    this.loadType = 'browser';
 
     this.parser = new MarkusParser(this);
     this.elements = Object.assign(markusElements, elements);
@@ -15,13 +15,46 @@ export default class Markus {
     this.roots = [];
   }
   load(onReady) {
-    PIXI.loader.add(this.filepath).load((loader, res) => {
-      this.lines = res[this.filename].data.split('\n');
-      this.flatPresets = this.parser.parsePresets(this.lines);
-      this.presets = this.parser.generateTree(this.flatPresets);
-      this.activatePresets(this.presets);
-      onReady && onReady(this);
+    this.loadFile(this.filepath).then((file) => {
+      let data = file.data;
+      let imports = data.match(/import .+/g);
+
+      if(imports) {
+        let files = [];
+        for(let i = 0; i < imports.length; i++) {
+          files.push(this.loadFile(imports[i].split(' ')[1]));
+        }
+
+        Promise.all(files).then(values => {
+          for(let i = 0; i < values.length; i++) {
+            data = data.replace('import ' + values[i].path, values[i].data);
+          }
+          this.parseFile(data);
+          onReady && onReady(this);
+        }, reason => {
+          throw Error(reason);
+        });
+      } else {
+        this.parseFile(data);
+        onReady && onReady(this);
+      }
     });
+  }
+  parseFile(data) {
+    this.lines = data.split('\n');
+    this.flatPresets = this.parser.parsePresets(this.lines);
+    this.presets = this.parser.generateTree(this.flatPresets);
+    this.activatePresets(this.presets);
+  }
+  loadFile(path) {
+    if(this.loadType === 'browser') {
+      return fetch(path).then((res) => {
+        if(res.status === 404) throw Error('Markus module "' + path + '" is not found');
+        return res.text()
+      }).then((data) => {
+        return {name: path.split('/').slice(-1)[0], path, data}
+      });
+    }
   }
   addRoot(elms) {
     if(typeof elms === 'array') this.roots = this.roots.concat(elm);

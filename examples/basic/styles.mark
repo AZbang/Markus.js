@@ -1,0 +1,15 @@
+styles
+  .sticker
+    @w 128
+    @h 128
+    @anchor .5
+    @centerX
+    @point
+      @x 23
+      @y 234
+
+  .sticker.top
+    @y 350
+
+  .sticker.bottom
+    @y 500

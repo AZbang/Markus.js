@@ -1,22 +1,5 @@
-styles
-  .sticker
-    @w 128
-    @h 128
-    @anchor .5
-    @centerX
-    @point
-      @x 23
-      @y 234
-
-  .sticker.top
-    @y 350
-
-  .sticker.bottom
-    @y 500
-
-resources
-  @cat sprites.json
-
+import styles.mark
+import resources.mark
 
 app(color=0x50B2FF, w=1920, h=1080)
   text | STICKERS WITH CAT :3
