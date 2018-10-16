@@ -11,8 +11,8 @@
   <script src="../../lib/markus.js"></script>
 
   <script>
-    var mark = new Markus('view.mark');
-    mark.load(() => {
+    var mark = new Markus();
+    mark.add('view.mark').then(() => {
       mark.get('resources').load(() => {
         mark.get('app').startRender();
       });

@@ -10,7 +10,7 @@ app(color=0x50B2FF, w=1920, h=1080)
     @y 250
     @color #fff
 
-  #playground(scale=1.5, x=-500)
+  block#playground(scale=1.5, x=-500)
     sprite.sticker.top(texture=cat7.png, marginX=-300)
     sprite.sticker.top(texture=cat.png, marginX=-150)
     sprite.sticker.top(texture=cat2.png)

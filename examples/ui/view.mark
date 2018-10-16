@@ -1,0 +1,5 @@
+resources
+  @ui sprites.json
+
+app(color=0x50B2FF, w=1920, h=1080, smooth=false)
+  sprite(texture=panel_blue.png, centerX, centerY)

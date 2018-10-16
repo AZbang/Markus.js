@@ -1,0 +1,55 @@
+{
+"frames": {
+	"arrowBlue_left.png": {
+		"frame": {"x":51, "y":197, "w":22, "h":21},
+		"spriteSourceSize": {"x":0,"y":0,"w":22,"h":21},
+		"sourceSize": {"w":22,"h":21}
+	},
+	"arrowBlue_right.png": {
+		"frame": {"x":28, "y":197, "w":22, "h":21},
+		"spriteSourceSize": {"x":0,"y":0,"w":22,"h":21},
+		"sourceSize": {"w":22,"h":21}
+	},
+	"buttonLong_blue.png": {
+		"frame": {"x":0, "y":46, "w":190, "h":49},
+		"spriteSourceSize": {"x":0,"y":0,"w":190,"h":49},
+		"sourceSize": {"w":190,"h":49}
+	},
+	"buttonLong_blue_pressed.png": {
+		"frame": {"x":0, "y":0, "w":190, "h":45},
+		"spriteSourceSize": {"x":0,"y":0,"w":190,"h":45},
+		"sourceSize": {"w":190,"h":45}
+	},
+	"buttonSquare_blue.png": {
+		"frame": {"x":191, "y":0, "w":45, "h":49},
+		"spriteSourceSize": {"x":0,"y":0,"w":45,"h":49},
+		"sourceSize": {"w":45,"h":49}
+	},
+	"buttonSquare_blue_pressed.png": {
+		"frame": {"x":191, "y":50, "w":45, "h":45},
+		"spriteSourceSize": {"x":0,"y":0,"w":45,"h":45},
+		"sourceSize": {"w":45,"h":45}
+	},
+	"cursorHand_beige.png": {
+		"frame": {"x":0, "y":197, "w":27, "h":28},
+		"spriteSourceSize": {"x":0,"y":0,"w":27,"h":28},
+		"sourceSize": {"w":27,"h":28}
+	},
+	"panelInset_blue.png": {
+		"frame": {"x":101, "y":96, "w":93, "h":94},
+		"spriteSourceSize": {"x":0,"y":0,"w":93,"h":94},
+		"sourceSize": {"w":93,"h":94}
+	},
+	"panel_blue.png": {
+		"frame": {"x":0, "y":96, "w":100, "h":100},
+		"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+		"sourceSize": {"w":100,"h":100}
+	}
+
+},
+"meta": {
+	"image": "sprites.png",
+	"size": {"w": 237, "h": 226},
+	"scale": "1"
+}
+}

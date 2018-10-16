@@ -1,7 +1,8 @@
-export default class Styles {
-  constructor(markus, data) {
-    this.markus = markus;
-    this.markus.addRoot(this);
+import BasicElement from './BasicElement'
+
+export default class Styles extends BasicElement() {
+  constructor(markus, root, data) {
+    super(markus, root, data)
     this.styles = data.presets;
   }
   get(elm) {
@@ -11,5 +12,8 @@ export default class Styles {
         Object.assign(props, this.styles[i].props);
     }
     return props;
+  }
+  set(selector, props) {
+    this.styles[selector] = props;
   }
 }

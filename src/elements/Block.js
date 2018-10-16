@@ -1,8 +1,9 @@
-export default class Block extends PIXI.Container {
-  constructor(markus, data) {
-    super();
+import DisplayElement from './DisplayElement'
 
-    markus.mixinDisplayGrahic(this, data.props);
-    data.presets.length && this.addChild.apply(this, markus.activatePresets(data.presets));
+export default class Block extends DisplayElement(PIXI.Container) {
+  constructor(markus, parent, data) {
+    super(markus, parent, data);
+
+    this.inlineItems = data.props.inlineItems || false;
   }
 }

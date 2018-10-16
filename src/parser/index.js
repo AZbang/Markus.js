@@ -3,8 +3,42 @@
 import {parseValue} from '../utils'
 
 export default class MarkusParser {
-  constructor(markus) {
-    this.markus = markus;
+  constructor(data) {
+    this.loadType = data.loadType || 'browser';
+  }
+  parseMarkfile(filepath) {
+    return new Promise((resolve) => {
+      this.imports([filepath]).then((data) => {
+        let entry = data[0].data;
+        let imports = this.getImports(entry);
+
+        this.imports(imports).then((files) => {
+          for(let i = 0; i < files.length; i++) {
+            if(this.getImports(files[i].data).length) throw Error('Imports are possible only in the entry file.')
+            entry = entry.replace('import ' + files[i].path, files[i].data);
+          }
+
+          let presets = this.parsePresets(entry.split('\n'));
+          resolve(this.generateTree(presets));
+        })
+      })
+    })
+  }
+  imports(pathes) {
+    let files = [];
+    for(let i = 0; i < pathes.length; i++) {
+      if(this.loadType === 'browser') {
+        files.push(fetch(pathes[i])
+          .then((res) => {
+            if(res.status === 404) throw Error('Markus module "' + pathes[i] + '" is not found');
+            return res.text()
+          }).then((data) => {
+            return {name: pathes[i].split('/').slice(-1)[0], path: pathes[i], data}
+          })
+        )
+      }
+    }
+    return Promise.all(files);
   }
   generateTree(presets) {
     let tree = [];
@@ -46,12 +80,12 @@ export default class MarkusParser {
   parsePresets(lines) {
     let presets = [];
     for(let i = 0; i < lines.length; i++) {
-      let preset = this.parseLine(lines[i]);
+      let preset = this.parsePreset(lines[i]);
       if(preset != null) presets.push(preset);
     }
     return presets;
   }
-  parseLine(line) {
+  parsePreset(line) {
     let type = 'elementNode';
     let depth = this.getDepth(line);
 
@@ -83,6 +117,15 @@ export default class MarkusParser {
 
     return {type, element, value, props, tags, id, depth, presets: []};
   }
+  parseValue(value) {
+    if(value === 'on' || value === 'yes' || value === 'true') return true;
+    else if(value === 'off' || value === 'no' || value === 'false') return false;
+    else if(/^[-\.\+]?[0-9]+\.?([0-9]+)?$/.test(value)) return Number(value);
+    return value;
+  }
+  getImports(data) {
+    return (data.match(/import .+/g) || []).map((v) => v.split(' ')[1]);
+  }
   getDepth(line) {
     return (line.match(/^[\t ]+/) || [''])[0].length/2;
   }
@@ -106,7 +149,7 @@ export default class MarkusParser {
   }
   getAttr(line) {
     let prop = line.match(/^[\t ]*@(\w+)(\s(.+))?/);
-    if(prop) return [prop[1], prop[3] != null ? parseValue(prop[3]) : true]
+    if(prop) return [prop[1], prop[3] != null ? this.parseValue(prop[3]) : true]
   }
   getProps(line) {
     let res = {};
@@ -116,7 +159,7 @@ export default class MarkusParser {
     let props = find[0].split(/,\s+/);
     for(let key in props) {
       let prop = props[key].replace('(', '').replace(')', '').split('=');
-      res[prop[0]] = prop[1] != null ? parseValue(prop[1]) : true;
+      res[prop[0]] = prop[1] != null ? this.parseValue(prop[1]) : true;
     }
     return res;
   }
