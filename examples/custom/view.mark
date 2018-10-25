@@ -1,0 +1,20 @@
+resources
+  @sprite sprite.png
+
+app(color=0x468754, width=1280, height=720)
+  text | CLICK ON THE BOTTLE!!!
+    @font Comic Sans MS
+    @size 40
+    @color #fff
+    @top 80
+    @left 50
+
+  bottle
+    @src sprite.png
+    @centerX
+    @centerY
+    @scale .2
+    @anchor .5
+    @buttonMode on
+    @interactive on
+    @speed .1
