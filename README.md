@@ -3,19 +3,24 @@ __The framework for creating declarative interfaces based on pixi.js__
 
 ![preview](preview.png)
 
-## Зачем это нужно?
-* **Tree elements -- удобное представления всех игровых сущностей в виде декларации единого дерева**<br>
+# Зачем это нужно?
+**Tree elements**<br>
+Удобное представления всех игровых сущностей в виде декларации единого дерева
 
-* **Mixins свойств -- позволяет создавать пресеты свойств, которые можно передать любым элементам дерева**<br>
+**Mixins свойств**<br>
+Позволяет создавать пресеты свойств, которые можно передать любым элементам дерева
 
-* **Manipulations with elements -- единое дерево позволяет легко манипулировать элементами в любом месте вашего приложения**<br>
+**Manipulations with elements**<br>
+Единое дерево позволяет легко манипулировать элементами в любом месте вашего приложения
 
-* **Basic Elements -- Markus предоставляет множество базовых элементов для ваших игровых интерфейсов**
+**Basic Elements**<br>
+Markus предоставляет множество базовых элементов для ваших игровых интерфейсов
 
-* **Custom Elements -- вы создаете собственные классы, которые позже декларируете в общем дереве элементов**
+**Custom Elements**<br>
+Вы создаете собственные классы, которые позже декларируете в общем дереве элементов
 
 
-## Mark lang
+# Mark lang
 ```js
 import path/file.mark
 
@@ -36,7 +41,7 @@ element.tag#id2
   childElement.tag#id3(angle = 35)
 ```
 
-## Basic docs
-* **[markus.View](preview.png)**
-* **[markus.Parser](preview.png)**
-* **[markus.Elements](preview.png)**
+# Basic docs
+* **[markus.View](docs/View.md)**
+* **[markus.Parser](docs/Parser.md)**
+* **[markus.Elements](Elements.md)**
