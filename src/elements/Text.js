@@ -1,13 +1,27 @@
-import DisplayElement from './DisplayElement'
+import Display from './Display'
 
-export default class Text extends DisplayElement(PIXI.Text) {
-  constructor(markus, parent, data) {
-    super(markus, parent, data, data.value);
+export default class Text extends Display(PIXI.Text) {
+  constructor(view, parent, data) {
+    super(view, parent, data);
 
-    this.style.fontSize = data.props.size;
-    this.style.fontFamily = data.props.font;
-    this.style.fontWeight = data.props.weight || 'normal';
-    this.style.fontStyle = data.props.style || 'normal';
-    this.style.fill = data.props.color || '#000';
+    if(this.value) this.text = this.value;
+  }
+  get size() {
+    return this.style.fontSize;
+  }
+  set size(v) {
+    this.style.fontSize = v;
+  }
+  get color() {
+    return this.style.fill;
+  }
+  set color(v) {
+    this.style.fill = v;
+  }
+  get font() {
+    return this.style.fontFamily;
+  }
+  set font(v) {
+    this.style.fontFamily = v;
   }
 }

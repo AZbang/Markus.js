@@ -11,11 +11,10 @@
   <script src="../../lib/markus.js"></script>
 
   <script>
-    var mark = new Markus();
-    mark.add(('view.mark') => {
+    var mark = new markus.View('view.mark', () => {
       mark.get('resources').load(() => {
-        mark.get('app').startRender();
-      });
+        mark.get('app').init();
+      })
     });
   </script>
 </body>

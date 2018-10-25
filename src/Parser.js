@@ -1,10 +1,6 @@
-// The first version of the parser based on RegExp. In the future, needs a faster solution.
-// 0.1.0v
-import {parseValue} from '../utils'
-
-export default class MarkusParser {
+export default class Parser {
   constructor(data) {
-    this.loadType = data.loadType || 'browser';
+    this.loadType = data.loadType || 'ajax';
   }
   parseMarkfile(filepath) {
     return new Promise((resolve) => {
@@ -27,7 +23,7 @@ export default class MarkusParser {
   imports(pathes) {
     let files = [];
     for(let i = 0; i < pathes.length; i++) {
-      if(this.loadType === 'browser') {
+      if(this.loadType === 'ajax') {
         files.push(fetch(pathes[i])
           .then((res) => {
             if(res.status === 404) throw Error('Markus module "' + pathes[i] + '" is not found');

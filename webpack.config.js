@@ -24,7 +24,7 @@ const config = {
   output: {
     path: __dirname + '/lib',
     filename: outputFile,
-    library: 'Markus',
+    library: 'markus',
     libraryTarget: 'umd',
     umdNamedDefine: true
   },

@@ -1,6 +1,7 @@
-import BasicElement from './BasicElement'
+import Element from './Element'
 
-export default class Styles extends BasicElement() {
+
+export default class Styles extends Element() {
   constructor(markus, root, data) {
     super(markus, root, data)
     this.styles = data.presets;
@@ -8,7 +9,7 @@ export default class Styles extends BasicElement() {
   get(elm) {
     let props = {};
     for(let i = 0; i < this.styles.length; i++) {
-      if(this.markus.isSelectorOfElement(this.styles[i], elm))
+      if(this.mark.isSelectorOfElement(this.styles[i], elm))
         Object.assign(props, this.styles[i].props);
     }
     return props;

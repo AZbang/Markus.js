@@ -1,9 +1,9 @@
-import DisplayElement from './DisplayElement'
+import Display from './Display'
 
-export default class Block extends DisplayElement(PIXI.Container) {
+export default class Block extends Display(PIXI.Container) {
   constructor(markus, parent, data) {
     super(markus, parent, data);
 
-    this.inlineItems = data.props.inlineItems || false;
+    this.mark.add(data.presets, this);
   }
 }

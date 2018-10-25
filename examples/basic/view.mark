@@ -1,24 +1,18 @@
-import styles.mark
 import resources.mark
+import styles.mark
 
 app(color=0x50B2FF, w=1920, h=1080)
-  text | STICKERS WITH CAT :3
-    @font Bebas Neue
-    @size 100
-    @centerX
-    @anchor 0.5
-    @y 250
-    @color #fff
+  text.label | STICKERS WITH CAT :3
 
-  block#playground(scale=1.5, x=-500)
-    sprite.sticker.top(texture=cat7.png, marginX=-300)
-    sprite.sticker.top(texture=cat.png, marginX=-150)
-    sprite.sticker.top(texture=cat2.png)
-    sprite.sticker.top(texture=cat3.png, marginX=150)
-    sprite.sticker.top(texture=cat8.png, marginX=300)
+  block#playground(y=100)
+    sprite.sticker.top(src=cat7.png, centerX=-600)
+    sprite.sticker.top(src=cat.png, centerX=-300)
+    sprite.sticker.top(src=cat2.png, centerX)
+    sprite.sticker.top(src=cat3.png, centerX=300)
+    sprite.sticker.top(src=cat8.png, centerX=600)
 
-    sprite.sticker.bottom(texture=cat9.png, marginX=-300)
-    sprite.sticker.bottom(texture=cat4.png, marginX=-150)
-    sprite.sticker.bottom(texture=cat5.png)
-    sprite.sticker.bottom(texture=cat6.png, marginX=150)
-    sprite.sticker.bottom(texture=cat10.png, marginX=300)
+    sprite.sticker.bottom(src=cat9.png, centerX=-600)
+    sprite.sticker.bottom(src=cat4.png, centerX=-300)
+    sprite.sticker.bottom(src=cat5.png, centerX)
+    sprite.sticker.bottom(src=cat6.png, centerX=300)
+    sprite.sticker.bottom(src=cat10.png, centerX=600)

@@ -1,9 +1,8 @@
-import BasicElement from './BasicElement'
+import Element from './Element'
 
-export default class App extends BasicElement(PIXI.Application) {
-  constructor(markus, root, data) {
-    super(markus, root, data, {
-      backgroundColor: data.props.color || 0x000000,
+export default class App extends Element(PIXI.Application) {
+  constructor(view, parent, data) {
+    super(view, parent, data, {
       width: window.innerWidth,
       height: window.innerHeight,
       sharedTicker: false,
@@ -13,19 +12,28 @@ export default class App extends BasicElement(PIXI.Application) {
     document.body.appendChild(this.view);
     document.body.style = "padding: 0; margin: 0; overflow: hidden; background: #000;";
 
-    if(!data.props.smooth) PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
-    this.width = data.props.w || 1280;
-    this.height = data.props.h || 720;
     this.resolution = null;
-
-    this.childList = this.stage.children;
 
     window.addEventListener('resize', () => this.resize(this));
     this.resize();
-
   }
-  startRender() {
-    this.markus.activatePresets(this, this.presets);
+  // properties
+  get color() {
+    return this.renderer.backgroundColor;
+  }
+  set color(v) {
+    this.renderer.backgroundColor = +v;
+  }
+  get smooth() {
+     return PIXI.settings.SCALE_MODE !== PIXI.SCALE_MODES.NEAREST;
+  }
+  set smooth(v) {
+    PIXI.settings.SCALE_MODE = v ? PIXI.SCALE_MODES.LINEAR : PIXI.SCALE_MODES.NEAREST;
+  }
+
+
+  init() {
+    this.mark.add(this.presets, this);
   }
   resize() {
     this.resolution = window.innerWidth/this.width;
