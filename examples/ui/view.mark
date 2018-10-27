@@ -1,3 +1,9 @@
+store
+  @someProp 1
+  @level 34
+  @text
+    | TEXT SAVE ME
+
 resources
   @ui sprites.json
 
