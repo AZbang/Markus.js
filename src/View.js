@@ -33,30 +33,32 @@ export default class View {
 
   // add element
   add(value, parent=this) {
+    let res = []
     if(typeof value === 'string') value = this.parser.parsePreset(value);
-    if(!Array.isArray(value)) value = [value];
+    if(!Array.isArray(value)) return this.addPreset(value, parent);
     for(let i = 0; i < value.length; i++) {
-      this.addPreset(value[i], parent);
+      res.push(this.addPreset(value[i], parent));
     }
+    return res;
   }
   addPreset(preset, parent=this) {
-    console.log(preset)
     if(preset.type !== 'elementNode') throw Error('Preset cannot be activate. His type is not elementNode');
     if(!this.elements[preset.element]) throw Error('Element "' + preset.element + '" is not defined');
-    new this.elements[preset.element](this, parent, preset);
+    return new this.elements[preset.element](this, parent, preset);
   }
 
   // remove element
-  remove(value) {
+  remove(value, parent=this) {
     if(typeof value === 'string') value = this.get(value, parent);
     if(!Array.isArray(value)) value = [value];
     for(let i = 0; i < value.length; i++) {
-      this.removePreset(value[i], value[i].parentElement);
+      this.removeElement(value[i], value[i].parentElement);
     }
   }
   removeElement(el, parent=this) {
     let index = parent.childList.indexOf(el);
     if(index !== -1) {
+      el.onRemove && el.onRemove();
       parent.childList.splice(index, 1);
       if(el instanceof PIXI.DisplayObject) {
         if(parent instanceof PIXI.DisplayObject) parent.removeChild(el);
@@ -82,7 +84,7 @@ export default class View {
         else return elms[i];
       }
 
-      if(!elms[i].childList.length) {
+      if(elms[i].childList.length) {
         let find = this.find(q, elms[i].childList, isAll);
         if(!isAll && find) return find;
         else res = res.concat(find);

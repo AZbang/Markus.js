@@ -9,6 +9,12 @@ export default class App extends Element(PIXI.Application) {
       sharedLoader: false
     });
 
+    this.defaultProps({
+      smooth: true,
+      width: 1920,
+      height: 1080
+    });
+
     document.body.appendChild(this.view);
     document.body.style = "padding: 0; margin: 0; overflow: hidden; background: #000;";
 
@@ -17,6 +23,7 @@ export default class App extends Element(PIXI.Application) {
     window.addEventListener('resize', () => this.resize(this));
     this.resize();
   }
+
   // properties
   get color() {
     return this.renderer.backgroundColor;
@@ -30,7 +37,6 @@ export default class App extends Element(PIXI.Application) {
   set smooth(v) {
     PIXI.settings.SCALE_MODE = v ? PIXI.SCALE_MODES.LINEAR : PIXI.SCALE_MODES.NEAREST;
   }
-
 
   init() {
     this.mark.add(this.presets, this);

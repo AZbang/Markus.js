@@ -14,6 +14,7 @@ export default function Element(superclass=class{}) {
       this.childList = [];
       this.ticks = [];
 
+      this.mark.get('styles') && Object.assign(preset.props, this.mark.get('styles').get(this));
       this.updateProps(preset.props);
 
       parent && parent.childList.push(this);
@@ -24,7 +25,6 @@ export default function Element(superclass=class{}) {
     }
 
     updateProps(props) {
-      this.mark.get('styles') && Object.assign(props, this.mark.get('styles').get(this));
       for(let key in props) {
         if(typeof this[key] === 'object') {
           if(typeof props[key] === 'object') Object.assign(this[key], props[key]);
@@ -32,6 +32,12 @@ export default function Element(superclass=class{}) {
           if(props[key + 'X']) this[key].x = props[key + 'X'];
           if(props[key + 'Y']) this[key].y = props[key + 'Y'];
         } else this[key] = props[key];
+      }
+    }
+    defaultProps(props) {
+      for(let key in props) {
+        if(this[key] === undefined)
+          this.updateProps({[key]: props[key]});
       }
     }
     addTick(cb) {

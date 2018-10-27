@@ -1,0 +1,20 @@
+styles
+  .label
+    @centerX
+    @centerY
+    @anchor .5
+    @size 100
+
+app(color=0x50B2FF)
+  scenes(scene=A)
+    block#A
+      button(toScene=B)
+        text.label | SCENE A
+
+    block#B
+      button(toScene=C)
+        text.label | SCENE B
+
+    block#C
+      button(toScene=A)
+        text.label | SCENE C

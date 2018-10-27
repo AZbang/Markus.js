@@ -5,13 +5,9 @@ export default function Display(superclass) {
     constructor(view, parent, data, arg) {
       super(view, parent, data, arg);
 
-      // computed position relative parent block or global
-      this.global = false;
-
-      // position margin
-      this.marginX = 0;
-      this.marginY = 0;
-
+      this.defaultProps({
+        x: 400, y: 400
+      });
       this.addTick(() => this._computedPosition());
     }
 

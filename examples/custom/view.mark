@@ -9,12 +9,13 @@ app(color=0x468754, width=1280, height=720)
     @top 80
     @left 50
 
-  bottle
-    @src sprite.png
-    @centerX
-    @centerY
-    @scale .2
-    @anchor .5
-    @buttonMode on
-    @interactive on
-    @speed .1
+  block
+    bottle
+      @src sprite.png
+      @scale .2
+      @anchor .5
+      @centerY
+      @centerX
+      @buttonMode on
+      @interactive on
+      @speed .1
