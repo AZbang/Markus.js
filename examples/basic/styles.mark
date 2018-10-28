@@ -1,14 +1,19 @@
 styles
+  #playground
+    @contentW 1100
+    @contentH 500
+    @centerX
+    @centerY 100
+    @anchorX .5
+    @anchorY .5
+    @inlineItems
+    @itemsMarginX 20
+    @itemsMarginY 100
+
   .sticker
     @w 200
     @h 200
     @anchor .5
-
-  .sticker.top
-    @y 350
-
-  .sticker.bottom
-    @y 650
 
   .label
     @font Bebas Neue

@@ -26,7 +26,7 @@ export default function Element(superclass=class{}) {
 
     updateProps(props) {
       for(let key in props) {
-        if(typeof this[key] === 'object') {
+        if(typeof this[key] === 'object' && this[key] != null) {
           if(typeof props[key] === 'object') Object.assign(this[key], props[key]);
           else if(this[key].set) this[key].set(props[key]);
           if(props[key + 'X']) this[key].x = props[key + 'X'];

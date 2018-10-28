@@ -1,14 +1,54 @@
-store
-  @someProp 1
-  @level 34
-  @text
-    | TEXT SAVE ME
+styles
+  block
+    @contentW 700
+    @centerX
+    @anchorX .5
+    @anchorY 0
+    @top 250
+    @inlineItems
+    @itemsMarginX 10
+    @itemsMarginY 10
+
+  sprite
+    @scale 2
+    @anchor .5
+
+  .label
+    @font VT323
+    @centerXY
+    @anchor .5
+    @scale .5
+    @size 61
+    @color #fff
 
 resources
   @ui sprites.json
 
-app(color=0x50B2FF, width=720, height=380, smooth=off)
-  sprite(src=buttonLong_blue.png, centerX, centerY=-50, anchor=.5)
-  sprite(src=buttonSquare_blue.png, centerX=-72, centerY=30, anchor=.5)
-  sprite(src=buttonSquare_blue.png, centerX, centerY=30, anchor=.5)
-  sprite(src=buttonSquare_blue.png, centerX=72, centerY=30, anchor=.5)
+app(color=0x0a0b1d, width=1280, height=720, smooth=off)
+  text(font=VT323, size=100, color=#fff, centerX, anchor=.5, top=150) | SELECT LEVEL
+
+  block
+    sprite(src=buttonLong_blue.png)
+      text.label | PROLOGE
+    sprite(src=buttonSquare_blue.png)
+      text.label | 1
+    sprite(src=buttonSquare_blue.png)
+      text.label | 2
+    sprite(src=buttonSquare_blue.png)
+      text.label | 3
+    sprite(src=buttonSquare_blue.png)
+      text.label | 4
+    sprite(src=buttonSquare_blue.png)
+      text.label | 5
+    sprite(src=buttonLong_blue.png)
+      text.label | ACTION
+    sprite(src=buttonSquare_blue.png)
+      text.label | 6
+    sprite(src=buttonSquare_blue.png)
+      text.label | 7
+    sprite(src=buttonSquare_blue.png)
+      text.label | 8
+    sprite(src=buttonSquare_blue.png)
+      text.label | 9
+    sprite(src=buttonLong_blue.png)
+      text.label | FINAL

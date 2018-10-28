@@ -5,8 +5,12 @@ export default function Display(superclass) {
     constructor(view, parent, data, arg) {
       super(view, parent, data, arg);
 
+      let app = this.mark.get('app');
       this.defaultProps({
-        x: 400, y: 400
+        x: 400, y: 400,
+        contentW: app.width,
+        contentH: app.height,
+        marginX: 0, marginY: 0
       });
       this.addTick(() => this._computedPosition());
     }
@@ -49,6 +53,13 @@ export default function Display(superclass) {
     get centerX() {
       return this._centerX;
     }
+    get centerXY() {
+      return this._centerX === this._centerY ? this._centerX : null;
+    }
+    set centerXY(v) {
+      this.centerX = v;
+      this.centerY = v;
+    }
 
     set top(v) {
       this._bottom = null;
@@ -88,6 +99,11 @@ export default function Display(superclass) {
       if(this.top != null) this.y = this.top;
       else if(this.centerY != null) this.y = h/2+this.centerY;
       else if(this.bottom != null) this.y = h-this.bottom;
+
+      if(this.parentElement.anchor) {
+        this.x -= w*this.parentElement.anchor.x;
+        this.y -= h*this.parentElement.anchor.y;
+      }
     }
   }
 }

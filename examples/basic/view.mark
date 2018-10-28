@@ -5,15 +5,15 @@ import styles.mark
 app(color=0x50B2FF, w=1920, h=1080)
   text.label | STICKERS WITH CAT :3
 
-  block#playground(y=100) // main block
-    sprite.sticker.top(src=cat7.png, centerX=-600)
-    sprite.sticker.top(src=cat.png, centerX=-300)
-    sprite.sticker.top(src=cat2.png, centerX)
-    sprite.sticker.top(src=cat3.png, centerX=300)
-    sprite.sticker.top(src=cat8.png, centerX=600)
+  block#playground
+    sprite.sticker.top(src=cat7.png)
+    sprite.sticker.top(src=cat.png)
+    sprite.sticker.top(src=cat2.png)
+    sprite.sticker.top(src=cat3.png)
+    sprite.sticker.top(src=cat8.png)
 
-    sprite.sticker.bottom(src=cat9.png, centerX=-600)
-    sprite.sticker.bottom(src=cat4.png, centerX=-300)
-    sprite.sticker.bottom(src=cat5.png, centerX)
-    sprite.sticker.bottom(src=cat6.png, centerX=300)
-    sprite.sticker.bottom(src=cat10.png, centerX=600)
+    sprite.sticker.bottom(src=cat9.png)
+    sprite.sticker.bottom(src=cat4.png)
+    sprite.sticker.bottom(src=cat5.png)
+    sprite.sticker.bottom(src=cat6.png)
+    sprite.sticker.bottom(src=cat10.png)
