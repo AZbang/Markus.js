@@ -82,6 +82,8 @@ export default class Parser {
     return presets;
   }
   parsePreset(line) {
+    line = this.removeComment(line);
+    
     let type = 'elementNode';
     let depth = this.getDepth(line);
 
@@ -119,8 +121,14 @@ export default class Parser {
     else if(/^[-\.\+]?[0-9]+\.?([0-9]+)?$/.test(value)) return Number(value);
     return value;
   }
+  removeComment(line) {
+    return line.replace(/\/\/.+/, '');
+  }
   getImports(data) {
     return (data.match(/import .+/g) || []).map((v) => v.split(' ')[1]);
+  }
+  getComment(line) {
+    return (line.match(/\/\/.+/)  || [''])[0]
   }
   getDepth(line) {
     return (line.match(/^[\t ]+/) || [''])[0].length/2;
