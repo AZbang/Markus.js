@@ -11,7 +11,6 @@ app(color=0x50B2FF, w=1920, h=1080)
     sprite.sticker.top(src=cat2.png)
     sprite.sticker.top(src=cat3.png)
     sprite.sticker.top(src=cat8.png)
-
     sprite.sticker.bottom(src=cat9.png)
     sprite.sticker.bottom(src=cat4.png)
     sprite.sticker.bottom(src=cat5.png)

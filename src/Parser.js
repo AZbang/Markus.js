@@ -83,7 +83,7 @@ export default class Parser {
   }
   parsePreset(line) {
     line = this.removeComment(line);
-    
+
     let type = 'elementNode';
     let depth = this.getDepth(line);
 
@@ -163,7 +163,12 @@ export default class Parser {
     let props = find[0].split(/,\s+/);
     for(let key in props) {
       let prop = props[key].replace('(', '').replace(')', '').split('=');
-      res[prop[0]] = prop[1] != null ? this.parseValue(prop[1]) : true;
+      let keys = prop[0].split('.');
+      let _prop = res;
+      for(let i = 0; i < keys.length; i++) {
+        if(keys[i+1]) _prop = _prop[keys[i]] = {};
+        else _prop[keys[i]] = prop[1] != null ? this.parseValue(prop[1]) : true;
+      }
     }
     return res;
   }
