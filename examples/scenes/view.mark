@@ -1,4 +1,4 @@
-styles
+mixins
   .label
     @centerX
     @centerY

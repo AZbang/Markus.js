@@ -1,16 +1,20 @@
 import Parser from './Parser'
 import * as elements from './elements'
 import {isSubsetArray} from './utils'
+import * as propPlugins from './propPlugins'
 
 export default class View {
-  constructor(filepath, onReady, customElms={}) {
+  constructor(filepath, onReady, customElms={}, customPropPlugins={}) {
     this.elements = elements;
     this.registerElements(customElms);
+    this.propPlugins = propPlugins;
+    this.registerPropPlugins(customPropPlugins);
 
     this.childList = [];
 
     this.parser = new Parser({loadType: 'ajax'});
     this.parser.parseMarkfile(filepath).then(tree => {
+
       this.add(tree);
       onReady && onReady(this);
     });
@@ -22,6 +26,16 @@ export default class View {
 
   registerElements(elms) {
     Object.assign(this.elements, elms);
+  }
+  registerPropPlugins(plugs) {
+    Object.assign(this.propPlugins, plugs);
+  }
+  propPlugin(el, key, props) {
+    let out = false;
+    for(let plug in this.propPlugins) {
+      out = !out ? this.propPlugins[plug](el, key, props) : true;
+    }
+    return out;
   }
 
   updateElements(dt, elms=this.childList) {

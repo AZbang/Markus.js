@@ -57,21 +57,24 @@ export default class Parser {
                 if(typeof presets[j].value !== 'object') presets[j].value = {value: presets[j].value};
                 Object.assign(presets[j].value, {[presets[i].name]: presets[i].value})
               } else if(presets[j].type === 'elementNode') {
-                Object.assign(presets[j].props, {[presets[i].name]: presets[i].value})
+                if(presets[i].attrType === 'only') {
+                  Object.assign(presets[j].props, {[presets[i].name]: presets[i].value});
+                } else if(presets[i].attrType === 'multiple') {
+                  if(presets[j].props[presets[i].name]) presets[j].props[presets[i].name].push(presets[i].value);
+                  else presets[j].props[presets[i].name] = [presets[i].value];
+                }
               } else throw Error('propNode cannot be a child of a ' + presets[j].type);
             }
-
             else if(presets[i].type === 'elementNode') {
               if(presets[j].type === 'elementNode') presets[j].presets.unshift(presets[i]);
               else throw Error('elementNode cannot be a child of a ' + presets[j].type);
             }
-
             break;
           }
         }
       } else tree.push(presets[i]);
     }
-    return   tree;
+    return tree;
   }
   parsePresets(lines) {
     let presets = [];
@@ -91,7 +94,7 @@ export default class Parser {
     let attr = this.getAttr(line);
     if(attr) {
       type = 'propNode';
-      return {type, depth, name: attr[0], value: attr[1]}
+      return {type, depth, name: attr[1], value: attr[2], attrType: attr[0]}
     }
 
     // else line is element, empty or value node
@@ -110,7 +113,7 @@ export default class Parser {
 
     // if line is elementNode, then parse props
     if(type !== 'valueNode') {
-      props = this.getProps(line);
+      props = this.getInlineAttrs(line);
     }
 
     return {type, element, value, props, tags, id, depth, presets: []};
@@ -152,10 +155,13 @@ export default class Parser {
     return (line.match(/\| *(.+)/) || [])[1] || '';
   }
   getAttr(line) {
-    let prop = line.match(/^[\t ]*@(\w+)(\s(.+))?/);
-    if(prop) return [prop[1], prop[3] != null ? this.parseValue(prop[3]) : true]
+    let prop = line.match(/^[\t ]*([\@\$])(\w+)(\s(.+))?/);
+    if(!prop) return;
+
+    let type = prop[1] === '@' ? 'only' : 'multiple';
+    return [type, prop[2], prop[4] != null ? this.parseValue(prop[4]) : true]
   }
-  getProps(line) {
+  getInlineAttrs(line) {
     let res = {};
     let find = line.match(/\((.+)\)/g);
     if(find == null) return {};

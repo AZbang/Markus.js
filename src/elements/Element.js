@@ -14,7 +14,7 @@ export default function Element(superclass=class{}) {
       this.childList = [];
       this.ticks = [];
 
-      this.mark.get('styles') && Object.assign(preset.props, this.mark.get('styles').get(this));
+      this.mark.get('mixins') && this.mark.get('mixins').merge(this, preset.props);
       this.updateProps(preset.props);
 
       parent && parent.childList.push(this);
@@ -26,12 +26,8 @@ export default function Element(superclass=class{}) {
 
     updateProps(props) {
       for(let key in props) {
-        if(typeof this[key] === 'object' && this[key] != null) {
-          if(typeof props[key] === 'object') Object.assign(this[key], props[key]);
-          else if(this[key].set) this[key].set(props[key]);
-          if(props[key + 'X']) this[key].x = props[key + 'X'];
-          if(props[key + 'Y']) this[key].y = props[key + 'Y'];
-        } else this[key] = props[key];
+        let out = this.mark.propPlugin(this, key, props);
+        if(!out) this[key] = props[key];
       }
     }
     defaultProps(props) {

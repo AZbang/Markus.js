@@ -1,4 +1,4 @@
-styles
+mixins
   #playground
     @contentW 1100
     @contentH 500
