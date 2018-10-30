@@ -1,4 +1,4 @@
-import Element from './Element'
+import Element from './Element';
 
 export default class App extends Element(PIXI.Application) {
   constructor(view, parent, data) {
@@ -16,7 +16,7 @@ export default class App extends Element(PIXI.Application) {
     });
 
     document.body.appendChild(this.view);
-    document.body.style = "padding: 0; margin: 0; overflow: hidden; background: #000;";
+    document.body.style = 'padding: 0; margin: 0; overflow: hidden; background: #000;';
 
     this.resolution = null;
 
@@ -32,7 +32,7 @@ export default class App extends Element(PIXI.Application) {
     this.renderer.backgroundColor = +v;
   }
   get smooth() {
-     return PIXI.settings.SCALE_MODE !== PIXI.SCALE_MODES.NEAREST;
+    return PIXI.settings.SCALE_MODE !== PIXI.SCALE_MODES.NEAREST;
   }
   set smooth(v) {
     PIXI.settings.SCALE_MODE = v ? PIXI.SCALE_MODES.LINEAR : PIXI.SCALE_MODES.NEAREST;

@@ -92,18 +92,30 @@ export default function Display(superclass) {
       let w = this.parentElement.contentW || this.mark.get('app').width;
       let h = this.parentElement.contentH || this.mark.get('app').height;
 
-      if(this.left != null) this.x = this.left;
-      else if(this.centerX != null) this.x = w/2+this.centerX;
-      else if(this.right != null) this.x = w-this.right;
+      if(this.left != null) {
+        this.x = this.left;
+      }
+      else if(this.centerX != null) {
+        this.x = w/2+this.centerX;
+      }
+      else if(this.right != null) {
+        this.x = w-this.right;
+      }
 
-      if(this.top != null) this.y = this.top;
-      else if(this.centerY != null) this.y = h/2+this.centerY;
-      else if(this.bottom != null) this.y = h-this.bottom;
+      if(this.top != null) {
+        this.y = this.top;
+      }
+      else if(this.centerY != null) {
+        this.y = h/2+this.centerY;
+      }
+      else if(this.bottom != null) {
+        this.y = h-this.bottom;
+      }
 
       if(this.parentElement.anchor) {
         this.x -= w*this.parentElement.anchor.x;
         this.y -= h*this.parentElement.anchor.y;
       }
     }
-  }
+  };
 }

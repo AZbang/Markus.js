@@ -1,4 +1,4 @@
-import Display from './Display'
+import Display from './Display';
 
 export default class Block extends Display(PIXI.Container) {
   constructor(markus, parent, data) {
@@ -19,10 +19,11 @@ export default class Block extends Display(PIXI.Container) {
     this.x = this.x-this.contentW*this.anchorX;
     this.y = this.y-this.contentH*this.anchorY;
 
-    if(!this.inlineItems) return;
+    if(!this.inlineItems) {
+      return;
+    }
     let x = 0, y = 0;
     let maxh = 0;
-    let maxmy = 0;
 
     for(let i = 0; i < this.children.length; i++) {
       let el = this.children[i];
@@ -36,7 +37,6 @@ export default class Block extends Display(PIXI.Container) {
         el.x = el.width*anchorX;
         x = el.width+this.itemsMarginX;
         y += maxh+this.itemsMarginY;
-        maxh = maxmy = 0;
       }
       el.y = y+el.height*anchorY;
     }

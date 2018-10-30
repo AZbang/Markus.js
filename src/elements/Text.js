@@ -1,10 +1,12 @@
-import Display from './Display'
+import Display from './Display';
 
 export default class Text extends Display(PIXI.Text) {
   constructor(view, parent, data) {
     super(view, parent, data);
 
-    if(this.value) this.text = this.value;
+    if(this.value) {
+      this.text = this.value;
+    }
   }
   get size() {
     return this.style.fontSize;

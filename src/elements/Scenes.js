@@ -1,4 +1,4 @@
-import Element from './Element'
+import Element from './Element';
 
 export default class Scenes extends Element(PIXI.Container) {
   constructor(view, parent, data) {

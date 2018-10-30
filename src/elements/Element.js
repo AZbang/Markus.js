@@ -19,21 +19,28 @@ export default function Element(superclass=class{}) {
 
       parent && parent.childList.push(this);
       if(this instanceof PIXI.DisplayObject) {
-        if(parent instanceof PIXI.DisplayObject) parent.addChild(this);
-        else parent.stage.addChild(this);
+        if(parent instanceof PIXI.DisplayObject) {
+          parent.addChild(this);
+        }
+        else {
+          parent.stage.addChild(this);
+        }
       }
     }
 
     updateProps(props) {
       for(let key in props) {
         let out = this.mark.propPlugin(this, key, props);
-        if(!out) this[key] = props[key];
+        if(!out) {
+          this[key] = props[key];
+        }
       }
     }
     defaultProps(props) {
       for(let key in props) {
-        if(this[key] === undefined)
+        if(this[key] === undefined) {
           this.updateProps({[key]: props[key]});
+        }
       }
     }
     addTick(cb) {
@@ -44,5 +51,5 @@ export default function Element(superclass=class{}) {
         this.ticks[i](dt);
       }
     }
-  }
+  };
 }

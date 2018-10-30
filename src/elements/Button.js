@@ -1,4 +1,4 @@
-import Sprite from './Sprite'
+import Sprite from './Sprite';
 
 export default class Button extends Sprite {
   constructor(mark, parent, data) {
@@ -7,7 +7,9 @@ export default class Button extends Sprite {
     this.interactive = true;
     this.buttonMode = true;
     this.on('pointertap', () => {
-      if(this.toScene) this.mark.get('scenes').scene = this.toScene;
-    })
+      if(this.toScene) {
+        this.mark.get('scenes').scene = this.toScene;
+      }
+    });
   }
 }

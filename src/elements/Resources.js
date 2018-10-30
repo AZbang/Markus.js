@@ -1,4 +1,4 @@
-import Element from './Element'
+import Element from './Element';
 
 export default class Resources extends Element(PIXI.loaders.Loader) {
   constructor(markus, root, data) {

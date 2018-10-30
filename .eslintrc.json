@@ -1,0 +1,55 @@
+{
+  "extends": ["eslint:recommended"],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "env": {
+    "node": true,
+    "browser": true
+  },
+  "globals": {
+    "Promise": true,
+    "PIXI": true
+  },
+  "rules": {
+    "semi": [
+      "error",
+      "always"
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "curly": [
+      "error",
+      "all"
+    ],
+    "brace-style": [
+      "error",
+      "stroustrup",
+      { "allowSingleLine": false }
+    ],
+    "indent": [
+      "error",
+      2,
+      { "SwitchCase": 1 }
+    ],
+    "eqeqeq": [
+      "error",
+      "allow-null"
+    ],
+    "no-useless-escape": [
+      "off"
+    ],
+    "no-var": [
+      "error"
+    ],
+    "no-console": [
+      "warn"
+    ],
+    "no-trailing-spaces": [
+      "error"
+    ]
+  }
+}

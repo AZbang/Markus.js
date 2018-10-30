@@ -1,4 +1,4 @@
-import Display from './Display'
+import Display from './Display';
 
 export default class Sprite extends Display(PIXI.Sprite) {
   constructor(mark, parent, data) {

@@ -1,3 +1,3 @@
 export {default as Parser} from './Parser.js';
 export {default as View} from './View.js';
-export * from './elements';
+export * from './elements/index';

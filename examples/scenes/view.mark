@@ -1,7 +1,9 @@
 mixins
-  .label
+  button
     @centerX
     @centerY
+
+  .label
     @anchor .5
     @size 100
 
