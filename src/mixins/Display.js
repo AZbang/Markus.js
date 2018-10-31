@@ -1,5 +1,11 @@
 import Element from './Element';
 
+/**
+ * @class
+ * @name Display
+ * @mixes markus.mixins.Element
+ * @memberof markus.mixins
+ */
 export default function Display(superclass) {
   return class extends Element(superclass) {
     constructor(view, parent, data, arg) {

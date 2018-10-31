@@ -1,5 +1,11 @@
-import Element from './Element';
+import Element from '../mixins/Element';
 
+/**
+ * @class
+ * @mixes markus.mixins.Element
+ * @memberof markus.elements
+ * @augments PIXI.Application
+ */
 export default class App extends Element(PIXI.Application) {
   constructor(view, parent, data) {
     super(view, parent, data, {
@@ -21,7 +27,6 @@ export default class App extends Element(PIXI.Application) {
     this.resolution = null;
 
     window.addEventListener('resize', () => this.resize(this));
-    this.resize();
   }
 
   // properties
@@ -36,6 +41,20 @@ export default class App extends Element(PIXI.Application) {
   }
   set smooth(v) {
     PIXI.settings.SCALE_MODE = v ? PIXI.SCALE_MODES.LINEAR : PIXI.SCALE_MODES.NEAREST;
+  }
+  set width(v) {
+    this._width = v;
+    this.resize();
+  }
+  get width() {
+    return this._width;
+  }
+  set height(v) {
+    this._height = v;
+    this.resize();
+  }
+  get height() {
+    return this._height;
   }
 
   init() {

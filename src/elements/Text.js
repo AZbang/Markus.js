@@ -1,5 +1,11 @@
-import Display from './Display';
+import Display from '../mixins/Display';
 
+/**
+ * @class
+ * @mixes markus.mixins.Display
+ * @memberof markus.elements
+ * @augments PIXI.Text
+ */
 export default class Text extends Display(PIXI.Text) {
   constructor(view, parent, data) {
     super(view, parent, data);

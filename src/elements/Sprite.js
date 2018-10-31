@@ -1,5 +1,11 @@
-import Display from './Display';
+import Display from '../mixins/Display';
 
+/**
+ * @class
+ * @mixes markus.mixins.Display
+ * @memberof markus.elements
+ * @augments PIXI.Sprite
+ */
 export default class Sprite extends Display(PIXI.Sprite) {
   constructor(mark, parent, data) {
     super(mark, parent, data, PIXI.Texture.WHITE);

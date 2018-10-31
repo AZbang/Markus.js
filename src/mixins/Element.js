@@ -1,3 +1,10 @@
+// import {propPlugins} from '../main.js';
+
+/**
+ * @class
+ * @name Element
+ * @memberof markus.mixins
+ */
 export default function Element(superclass=class{}) {
   return class extends superclass {
     constructor(view, parent, preset, arg) {
@@ -30,8 +37,37 @@ export default function Element(superclass=class{}) {
 
     updateProps(props) {
       for(let key in props) {
-        let out = this.mark.propPlugin(this, key, props);
-        if(!out) {
+        // call custom prop plugins
+        // for(let plug in propPlugins) {
+        //   if(this.propPlugins[plug](this, key, props)) {
+        //     continue propsCycle;
+        //   }
+        // }
+
+        // parse events prop
+        if(key === 'on' && typeof props[key] === 'object') {
+          for(let i = 0; i < props[key].length; i++) {
+            this.on(props[key][i].value, () => this.updateProps(props[key][i]));
+          }
+          return true;
+        }
+
+        // parse object prop and points
+        else if(typeof this[key] === 'object' && this[key] != null) {
+          if(typeof props[key] === 'object') {
+            Object.assign(this[key], props[key]);
+          }
+          else if(this[key].set) {
+            this[key].set(props[key]);
+          }
+          if(props[key + 'X']) {
+            this[key].x = props[key + 'X'];
+          }
+          if(props[key + 'Y']) {
+            this[key].y = props[key + 'Y'];
+          }
+        }
+        else {
           this[key] = props[key];
         }
       }

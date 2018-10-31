@@ -1,3 +1,22 @@
+/**
+  * Additional logic for the properties of the element. Plugins are called every time a property is passed to an element.
+  *
+  * @example
+  * function plugin(el, keyProp, allProps) {
+  *  if(allProps[keyProp] === 'somevalue') {
+  *    // do somethin
+  *    return true // if true, the property will no longer be processed by other plugins.
+  *  }
+  * }
+  * @namespace markus.propPlugins
+*/
+
+
+/**
+ * Replaces appW to application width and appH to application height.
+ * @memberof markus.propPlugins
+ * @name fullsize
+*/
 export function fullsize(el, key, props) {
   if(props[key] === 'appW') {
     props[key] = el.mark.get('app').width;
@@ -7,43 +26,14 @@ export function fullsize(el, key, props) {
   }
 }
 
+/**
+ * Print prop "consolelog" value to console. Return true
+ * @memberof markus.propPlugins
+ * @name print
+*/
 export function print(el, key, props) {
   if(key === 'consolelog') {
     window.console.log(props[key]);
-    return true;
-  }
-}
-
-export function propEvent(el, key, props) {
-  if(key === 'on' && typeof props[key] === 'object') {
-    for(let i = 0; i < props[key].length; i++) {
-      el.on(props[key][i].value, () => el.updateProps(props[key][i]));
-    }
-    return true;
-  }
-}
-
-export function propTween(el, key) {
-  if(key === 'tween') {
-    // add tween props
-    return true;
-  }
-}
-
-export function propObject(el, key, props) {
-  if(typeof el[key] === 'object' && el[key] != null) {
-    if(typeof props[key] === 'object') {
-      Object.assign(el[key], props[key]);
-    }
-    else if(el[key].set) {
-      el[key].set(props[key]);
-    }
-    if(props[key + 'X']) {
-      el[key].x = props[key + 'X'];
-    }
-    if(props[key + 'Y']) {
-      el[key].y = props[key + 'Y'];
-    }
     return true;
   }
 }

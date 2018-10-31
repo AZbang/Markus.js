@@ -1,7 +1,18 @@
+/**
+ * Marklang Parser
+ * @example
+ * const parser = new markus.Parser();
+ * await parser.parseMarkfile('mark.view');
+ * > [{type="elementNode", element: 'app', props: {...}, presets: [...]}]
+ * @class
+ * @memberof markus
+ * @param [loadType=ajax] {string} Method of loading markfile
+ */
 export default class Parser {
-  constructor(data) {
-    this.loadType = data.loadType || 'ajax';
+  constructor(loadType='ajax') {
+    this.loadType = loadType;
   }
+
   parseMarkfile(filepath) {
     return new Promise((resolve) => {
       this.imports([filepath]).then((data) => {
@@ -22,6 +33,7 @@ export default class Parser {
       });
     });
   }
+
   imports(pathes) {
     let files = [];
     for(let i = 0; i < pathes.length; i++) {
@@ -40,58 +52,61 @@ export default class Parser {
     }
     return Promise.all(files);
   }
+
   generateTree(presets) {
     let tree = [];
     for(let i = presets.length-1; i >= 0; i--) {
       if(presets[i].depth !== 0) {
         for(let j = i-1; j >= 0; j--) {
           if(presets[j].depth < presets[i].depth) {
+            let parent = presets[j];
+            let child = presets[i];
 
-            if(presets[i].type === 'valueNode') {
-              if(presets[j].type === 'elementNode') {
-                presets[j].value = presets[i].value + (presets[j].value ? '\n' + presets[j].value : '');
+            if(child.type === 'valueNode') {
+              if(parent.type === 'elementNode') {
+                parent.value = child.value + (parent.value ? '\n' + parent.value : '');
               }
-              else if(presets[j].type === 'propNode') {
-                if(presets[j].value === true) {
-                  presets[j].value = '';
+              else if(parent.type === 'propNode') {
+                if(parent.value === true) {
+                  parent.value = '';
                 }
-                presets[j].value = presets[i].value + (presets[j].value ? '\n' + presets[j].value : '');
+                parent.value = child.value + (parent.value ? '\n' + parent.value : '');
               }
               else {
-                throw Error('valueNode cannot be a child of a ' + presets[j].type);
+                throw Error('valueNode cannot be a child of a ' + parent.type);
               }
             }
 
-            if(presets[i].type === 'propNode') {
-              if(presets[j].type === 'propNode') {
-                if(typeof presets[j].value !== 'object') {
-                  presets[j].value = {value: presets[j].value};
+            if(child.type === 'propNode') {
+              if(parent.type === 'propNode') {
+                if(typeof parent.value !== 'object') {
+                  parent.value = {value: parent.value};
                 }
-                Object.assign(presets[j].value, {[presets[i].name]: presets[i].value});
+                Object.assign(parent.value, {[child.name]: child.value});
               }
-              else if(presets[j].type === 'elementNode') {
-                if(presets[i].attrType === 'only') {
-                  Object.assign(presets[j].props, {[presets[i].name]: presets[i].value});
+              else if(parent.type === 'elementNode') {
+                if(child.attrType === 'only') {
+                  Object.assign(parent.props, {[child.name]: child.value});
                 }
-                else if(presets[i].attrType === 'multiple') {
-                  if(presets[j].props[presets[i].name]) {
-                    presets[j].props[presets[i].name].push(presets[i].value);
+                else if(child.attrType === 'multiple') {
+                  if(parent.props[child.name]) {
+                    parent.props[child.name].push(child.value);
                   }
                   else {
-                    presets[j].props[presets[i].name] = [presets[i].value];
+                    parent.props[child.name] = [child.value];
                   }
                 }
               }
               else {
-                throw Error('propNode cannot be a child of a ' + presets[j].type);
+                throw Error('propNode cannot be a child of a ' + parent.type);
               }
             }
-            else if(presets[i].type === 'elementNode') {
-              if(presets[j].type === 'elementNode') {
-                presets[j].presets.unshift(presets[i]);
+            else if(child.type === 'elementNode') {
+              if(parent.type === 'elementNode') {
+                parent.presets.unshift(child);
               }
               else {
-                throw Error('elementNode cannot be a child of a ' + presets[j].type);
+                throw Error('elementNode cannot be a child of a ' + parent.type);
               }
             }
             break;

@@ -1,5 +1,11 @@
-import Display from './Display';
+import Display from '../mixins/Display';
 
+/**
+ * @class
+ * @mixes markus.mixins.Display
+ * @memberof markus.elements
+ * @augments PIXI.Container
+ */
 export default class Block extends Display(PIXI.Container) {
   constructor(markus, parent, data) {
     super(markus, parent, data);

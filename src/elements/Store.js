@@ -1,5 +1,10 @@
-import Element from './Element';
+import Element from '../mixins/Element';
 
+/**
+ * @class
+ * @mixes markus.mixins.Element
+ * @memberof markus.elements
+ */
 export default class Store extends Element() {
   constructor(mark, parent, data) {
     // A small "trick" that the superclass Element didn't parse the preset properties directly to the Store class

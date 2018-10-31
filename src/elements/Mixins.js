@@ -1,6 +1,10 @@
-import Element from './Element';
+import Element from '../mixins/Element';
 
-
+/**
+ * @class
+ * @mixes markus.mixins.Element
+ * @memberof markus.elements
+ */
 export default class Mixins extends Element() {
   constructor(mark, root, data) {
     super(mark, root, data);

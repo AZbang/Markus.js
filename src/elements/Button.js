@@ -1,5 +1,10 @@
 import Sprite from './Sprite';
 
+/**
+ * @class
+ * @memberof markus.elements
+ * @augments markus.elements.Sprite
+ */
 export default class Button extends Sprite {
   constructor(mark, parent, data) {
     super(mark, parent, data);

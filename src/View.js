@@ -1,43 +1,55 @@
 import Parser from './Parser';
-import * as elements from './elements/index';
+import {elements} from './main';
 import {isSubsetArray} from './utils';
-import * as propPlugins from './propPlugins';
 
+/**
+ * The root element of the entire tree of objects. Responsible for loading the tree and manipulating the elements.
+ * @example
+ * const mark = new markus.View('view.mark', () => {
+ *   mark.get('resources').load(() => {
+ *     mark.get('app').start();
+ *   });
+ * }, [Player, Bottle, EnemyController]);
+ * @class
+ * @memberof markus
+ * @param [filepath] {string} File path to main markfile
+ * @param [onReady] {function} Called when the markfile is loaded and the rendering
+ */
 export default class View {
-  constructor(filepath, onReady, customElms={}, customPropPlugins={}) {
-    this.elements = elements;
-    this.registerElements(customElms);
-    this.propPlugins = propPlugins;
-    this.registerPropPlugins(customPropPlugins);
-
+  constructor(filepath, onReady) {
+    /**
+     * Root child list which contains all the root elements of the mark file
+     * @member {Element[]}
+     */
     this.childList = [];
 
-    this.parser = new Parser({loadType: 'ajax'});
-    this.parser.parseMarkfile(filepath).then(tree => {
+    /**
+     * Marklang parser
+     * @member {markus.Parser}
+     */
+    this.parser = new Parser('ajax');
+    if(filepath) {
+      this.parser.parseMarkfile(filepath).then(tree => {
+        this.add(tree);
+        onReady && onReady(this);
+      });
+    }
 
-      this.add(tree);
-      onReady && onReady(this);
-    });
-
+    /**
+     * Main ticker for update all elements. Initially active.
+     * @member {PIXI.ticker.Ticker}
+     */
     this.ticker = new PIXI.ticker.Ticker();
     this.ticker.add(dt => this.updateElements(dt));
     this.ticker.start();
   }
 
-  registerElements(elms) {
-    Object.assign(this.elements, elms);
-  }
-  registerPropPlugins(plugs) {
-    Object.assign(this.propPlugins, plugs);
-  }
-  propPlugin(el, key, props) {
-    let out = false;
-    for(let plug in this.propPlugins) {
-      out = !out ? this.propPlugins[plug](el, key, props) : true;
-    }
-    return out;
-  }
-
+  /**
+   * Update all elements in root childList
+   * @private
+   * @param dt {number} Delta time
+   * @param [elms=view.childList] {Array} Array of element
+   */
   updateElements(dt, elms=this.childList) {
     for(let i = 0; i < elms.length; i++) {
       elms[i].tick && elms[i].tick(dt);
@@ -45,42 +57,89 @@ export default class View {
     }
   }
 
-  // add element
+
+  /**
+   * Add elements to parent node
+   * @param value {(string|string[]|Preset|Preset[])} Elements to be added can be either a string or an array of marklang markup strings, or a Preset or an array of Presets.
+   * @param [parent=view] {Element} Parent element
+   * @returns {(Element|Element[])} Returns added items
+   *
+   * @example
+   * mark.add('enemy.zombie(level=23)', enemyController);
+   * mark.add(['sprite.tag(prop=1)', 'text | SOME TEXT']);
+   * mark.add([presetEnemy, presetEnemy], enemyController);
+   * mark.add(presetEnemy, enemyController);
+   */
   add(value, parent=this) {
-    if(typeof value === 'string') {
-      value = this.parser.parsePreset(value);
-    }
     if(!Array.isArray(value)) {
       return this.addPreset(value, parent);
     }
+
     let res = [];
     for(let i = 0; i < value.length; i++) {
-      res.push(this.addPreset(value[i], parent));
+      let preset = value[i];
+      if(typeof preset === 'string') {
+        preset = this.parser.parsePreset(preset);
+      }
+      res.push(this.addPreset(preset, parent));
     }
     return res;
   }
+
+
+  /**
+   * Add Preset to parent node
+   * @param preset {Preset} Preset object
+   * @param [parent=view] {Element} Parent element
+   * @returns {Element} Returns added element
+   */
   addPreset(preset, parent=this) {
     if(preset.type !== 'elementNode') {
       throw Error('Preset cannot be activate. His type is not elementNode');
     }
-    if(!this.elements[preset.element]) {
+
+    let className = preset.element.slice(0, 1).toUpperCase() + preset.element.slice(1);
+    let elm = elements[className] || elements[preset.element];
+    if(!elm) {
       throw Error('Element "' + preset.element + '" is not defined');
     }
-    return new this.elements[preset.element](this, parent, preset);
+    return new elm(this, parent, preset);
   }
 
-  // remove element
+
+  /**
+   * Remove elements from parent node
+   * @param value {(string|string[]|Element|Element[])} Elements to be removed can be either a string or an array of marklang markup selectors strings, or a Element or an array of Elements.
+   * @param [parent=view] {Element} Parent element
+   * @returns {(Element|Element[])} Returns removed items
+   *
+   * @example
+   * mark.remove('enemy.zombie(level=23)', enemyController);
+   * mark.remove([Enemy, Enemy], enemyController);
+   * mark.remove(Enemy, enemyController);
+   */
   remove(value, parent=this) {
-    if(typeof value === 'string') {
-      value = this.get(value, parent);
-    }
     if(!Array.isArray(value)) {
-      value = [value];
+      return this.removeElement(value, value.parentElement);
     }
+
+    let res = [];
     for(let i = 0; i < value.length; i++) {
-      this.removeElement(value[i], value[i].parentElement);
+      let preset = value[i];
+      if(typeof preset === 'string') {
+        preset = this.get(preset, parent);
+      }
+      res.push(this.removeElement(preset, preset.parentElement));
     }
+    return res;
   }
+
+  /**
+   * Remove Element from parent node
+   * @param el {ELement} Element class
+   * @param [parent=view] {Element} Parent element
+   * @returns {Element} Returns removed element
+   */
   removeElement(el, parent=this) {
     let index = parent.childList.indexOf(el);
     if(index !== -1) {
@@ -95,18 +154,60 @@ export default class View {
         }
       }
     }
+    return el;
   }
 
-  // find element
+  /**
+   * Get element by selector
+   * @param selector {ELement} Element selector
+   * @param [parent=view] {Element} Parent element for search
+   * @returns {Element}
+   *
+   * @example
+   * mark.get('sprite.cat');
+   * > Sprite
+   *
+   * mark.get('sprite.cat.black');
+   * > null
+   */
   get(selector, parent=this) {
     let q = this.parser.parseQuery(selector);
     return this.find(q, parent.childList);
   }
+
+  /**
+   * Get elements by selector
+   * @param selector {ELement} Elements selector
+   * @param [parent=view] {Element} Parent element for search
+   * @returns {Element[]}
+   *
+   * @example
+   * mark.getAll('sprite.cat');
+   * > [Sprite, Sptite, Sprite]
+   *
+   * mark.getAll('#cat');
+   * > null
+   */
   getAll(selector, parent=this) {
     let q = this.parser.parseQuery(selector);
     return this.find(q, parent.childList, true);
   }
-  find(q, elms=[], isAll=false) {
+
+  /**
+   * General method for searching items on request
+   * @param q {Object} Query object
+   * @param q.id {string} Query id
+   * @param q.element {string} Query element name
+   * @param q.tags {string[]} Query element tags
+   * @param elms {Element[]} List Elements
+   * @param [isAll=false] {booleon} Do I need to search for all elements by q
+   * @returns {(Element[]|Element)}
+   *
+   * @example
+   * mark.find({element: 'sprite', tags: ['cat'], mark.root, true});
+   * > [Sprite, Sptite, Sprite]
+   */
+  find(q, elms, isAll=false) {
     let res = [];
     for(let i = 0; i < elms.length; i++) {
       if(this.isSelectorOfElement(q, elms[i])) {
@@ -118,6 +219,7 @@ export default class View {
         }
       }
 
+      // If childList has children and the search is performed globally
       if(elms[i].childList.length) {
         let find = this.find(q, elms[i].childList, isAll);
         if(!isAll && find) {
@@ -130,6 +232,16 @@ export default class View {
     }
     return isAll ? res : null;
   }
+
+  /**
+   * Checks if the request is suitable for the item
+   * @param q {Object} Query object
+   * @param q.id {string} Query id
+   * @param q.element {string} Query element name
+   * @param q.tags {string[]} Query element tags
+   * @param elm {Element} Checked Element
+   * @returns {booleon}
+   */
   isSelectorOfElement(q, elm) {
     let isEl = q.element ? q.element === elm.element : true;
     let isId = q.id ? q.id === elm.id : true;

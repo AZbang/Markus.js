@@ -12,12 +12,13 @@
   <script src="Bottle.js"></script>
 
   <script>
+    markus.registerElements({Bottle});
+    
     var mark = new markus.View('view.mark', () => {
       mark.get('resources').load(() => {
         mark.get('app').init();
       })
-    }, {bottle: Bottle});
-
+    });
   </script>
 </body>
 </html>

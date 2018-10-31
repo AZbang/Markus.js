@@ -1,14 +1,15 @@
-export { default as element } from './Element';
-export { default as display } from './Display';
+/**
+ * @namespace markus.elements
+ */
 
-export { default as app } from './App';
-export { default as resources } from './Resources';
-export { default as mixins } from './Mixins';
-export { default as store } from './Store';
+export { default as App } from './App';
+export { default as Resources } from './Resources';
+export { default as Mixins } from './Mixins';
+export { default as Store } from './Store';
 
-export { default as scenes } from './Scenes';
-export { default as button } from './Button';
+export { default as Scenes } from './Scenes';
+export { default as Button } from './Button';
 
-export { default as block } from './Block';
-export { default as sprite } from './Sprite';
-export { default as text } from './Text';
+export { default as Block } from './Block';
+export { default as Sprite } from './Sprite';
+export { default as Text } from './Text';

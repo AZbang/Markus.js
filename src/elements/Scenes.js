@@ -1,5 +1,11 @@
-import Element from './Element';
+import Element from '../mixins/Element';
 
+/**
+ * @class
+ * @mixes markus.mixins.Element
+ * @memberof markus.elements
+ * @augments PIXI.Container
+ */
 export default class Scenes extends Element(PIXI.Container) {
   constructor(view, parent, data) {
     super(view, parent, data);
