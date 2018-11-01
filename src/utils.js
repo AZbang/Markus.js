@@ -2,7 +2,6 @@
  * @namespace markus.utils
  */
 
-
 /**
  * Checks if a subset belongs to a set
  * @memberof markus.utils
