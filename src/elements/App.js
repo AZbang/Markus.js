@@ -1,6 +1,17 @@
 import Element from '../mixins/Element';
 
 /**
+ * Main class for the entire visible tree of elements.
+ * @example
+ * app
+ *  &#64;w 1280
+ *  &#64;h 720
+ *  &#64;color 0xFFFFFF
+ *  &#64;smooth off
+ *
+ * // activate children presets
+ * mark.get('app').init();
+ *
  * @class
  * @mixes markus.mixins.Element
  * @memberof markus.elements
@@ -21,27 +32,46 @@ export default class App extends Element(PIXI.Application) {
       height: 1080
     });
 
-    document.body.appendChild(this.view);
-    document.body.style = 'padding: 0; margin: 0; overflow: hidden; background: #000;';
-
+    /**
+     * Resolution coef
+     * @member {number}
+     */
     this.resolution = null;
 
+
+    document.body.appendChild(this.view);
+    document.body.style = 'padding: 0; margin: 0; overflow: hidden; background: #000;';
     window.addEventListener('resize', () => this.resize(this));
   }
 
-  // properties
-  get color() {
-    return this.renderer.backgroundColor;
-  }
+  /**
+   * Renderer backgroundColor
+   * @member {number}
+   */
   set color(v) {
     this.renderer.backgroundColor = +v;
   }
+  get color() {
+    return this.renderer.backgroundColor;
+  }
+
+
+  /**
+   * Smooth textures in pixi
+   * @member {bolleon}
+   */
   get smooth() {
     return PIXI.settings.SCALE_MODE !== PIXI.SCALE_MODES.NEAREST;
   }
   set smooth(v) {
     PIXI.settings.SCALE_MODE = v ? PIXI.SCALE_MODES.LINEAR : PIXI.SCALE_MODES.NEAREST;
   }
+
+
+  /**
+   * Width game view
+   * @member {number}
+   */
   set width(v) {
     this._width = v;
     this.resize();
@@ -49,6 +79,11 @@ export default class App extends Element(PIXI.Application) {
   get width() {
     return this._width;
   }
+
+  /**
+   * Height game view
+   * @member {number}
+   */
   set height(v) {
     this._height = v;
     this.resize();
@@ -57,13 +92,17 @@ export default class App extends Element(PIXI.Application) {
     return this._height;
   }
 
-  init() {
-    this.mark.add(this.presets, this);
-  }
   resize() {
     this.resolution = window.innerWidth/this.width;
     this.renderer.resize(window.innerWidth, this.height*this.resolution);
     this.view.style.marginTop = window.innerHeight/2-this.height*this.resolution/2 + 'px';
     this.stage.scale.set(this.resolution);
+  }
+
+  /**
+   * Initial app elements
+   */
+  init() {
+    this.mark.add(this.presets, this);
   }
 }

@@ -26,7 +26,7 @@
     "postversion": "npm run build",
     "postpublish": "npm run deploy",
     "predeploy": "npm run copy && npm run docs",
-    "copy": "copyfiles -f \"node_modules/{pixi.js,pixi-layers}/dist/*.{js,map}\" examples/lib",
+    "copy": "copyfiles -f \"node_modules/{pixi.js}/dist/*.{js,map}\" examples/lib",
     "deploy": "gh-pages -d . -s \"{examples,docs,lib}/**\"",
     "start": "parallelshell \"npm run watch\" \"npm run dev\""
   },

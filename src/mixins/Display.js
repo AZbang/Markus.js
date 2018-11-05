@@ -1,10 +1,17 @@
 import Element from './Element';
 
 /**
+ * Mixin for additional functionality for all pixi elements
+ *
  * @class
  * @name Display
+ * @param superclass {Class} Parent class
  * @mixes markus.mixins.Element
  * @memberof markus.mixins
+ *
+ * @example
+ * let containerWithDisplayAndElementMix = new markus.mixins.Display(PIXI.Container);
+ * containerWithDisplayAndElementMix(view, parent, preset, argForParentClass);
  */
 export default function Display(superclass) {
   return class extends Element(superclass) {
@@ -13,26 +20,61 @@ export default function Display(superclass) {
 
       let app = this.mark.get('app');
       this.defaultProps({
-        x: 400, y: 400,
+        /**
+         * The width of the area of allowable positions children of the element
+         * @member {number}
+         * @memberof markus.mixins.Display
+         */
         contentW: app.width,
-        contentH: app.height,
-        marginX: 0, marginY: 0
+
+        /**
+         * The height of the area of allowable positions children of the element
+         * @member {number}
+         * @memberof markus.mixins.Display
+         */
+        contentH: app.height
       });
+
+
       this.addTick(() => this._computedPosition());
     }
 
+    /**
+     * Angle in degrees
+     * @memberof markus.mixins.Display
+     * @member {number}
+     */
     set angle(v) {
       this.rotation = v*PIXI.DEG_TO_RAD;
     }
     get angle() {
       return this.rotation*PIXI.RAD_TO_DEG;
     }
+
+
+    /**
+     * Short setter for width
+     * @memberof markus.mixins.Display
+     * @member {number}
+     */
     set w(v) {
       this.width = v;
     }
+
+    /**
+     * Short setter for height
+     * @memberof markus.mixins.Display
+     * @member {number}
+     */
     set h(v) {
       this.height = v;
     }
+
+    /**
+     * Positioning the element relative to the left edge of the parent
+     * @memberof markus.mixins.Display
+     * @member {number}
+     */
     set left(v) {
       this._right = null;
       this._centerX = null;
@@ -42,6 +84,11 @@ export default function Display(superclass) {
       return this._left;
     }
 
+    /**
+     * Positioning the element relative to the right edge of the parent
+     * @memberof markus.mixins.Display
+     * @member {number}
+     */
     set right(v) {
       this._left = null;
       this._centerX = null;
@@ -51,6 +98,11 @@ export default function Display(superclass) {
       return this._right;
     }
 
+    /**
+     * Positioning the element relative to the horizontal center of the parent
+     * @memberof markus.mixins.Display
+     * @member {number}
+     */
     set centerX(v) {
       this._left = null;
       this._right = null;
@@ -59,6 +111,12 @@ export default function Display(superclass) {
     get centerX() {
       return this._centerX;
     }
+
+    /**
+     * Positioning the element relative to the horizontal and vertical center of the parent
+     * @memberof markus.mixins.Display
+     * @member {number}
+     */
     get centerXY() {
       return this._centerX === this._centerY ? this._centerX : null;
     }
@@ -67,6 +125,12 @@ export default function Display(superclass) {
       this.centerY = v;
     }
 
+
+    /**
+     * Positioning the element relative to the top edge of the parent
+     * @memberof markus.mixins.Display
+     * @member {v}
+     */
     set top(v) {
       this._bottom = null;
       this._centerY = null;
@@ -76,6 +140,12 @@ export default function Display(superclass) {
       return this._top;
     }
 
+
+    /**
+     * Positioning the element relative to the bottom edge of the parent
+     * @memberof markus.mixins.Display
+     * @member {number}
+     */
     set bottom(v) {
       this._top = null;
       this._centerY = null;
@@ -85,6 +155,11 @@ export default function Display(superclass) {
       return this._bottom;
     }
 
+    /**
+     * Positioning the element relative to the vertical center of the parent
+     * @memberof markus.mixins.Display
+     * @member {number}
+     */
     set centerY(v) {
       this._top = null;
       this._bottom = null;

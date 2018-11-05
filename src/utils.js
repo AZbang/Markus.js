@@ -12,7 +12,7 @@
  * // return false
  * isSubsetArray([1, 2, 3, 5], [1, 4])
  */
-export function isSubsetArray(set, subset) {
+function isSubsetArray(set, subset) {
   for(let i = 0; i < subset.length; i++) {
     let isInclude = false;
     for(let j = 0; j < set.length; j++) {
@@ -27,3 +27,5 @@ export function isSubsetArray(set, subset) {
   }
   return true;
 }
+
+export {isSubsetArray};

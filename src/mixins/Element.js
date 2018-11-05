@@ -1,29 +1,75 @@
 // import {propPlugins} from '../main.js';
 
 /**
- * @class
- * @name Element
+ * Mixin for additional functionality for all markus elements
+ * @class Element
+ * @param superclass {Class} Parent class
  * @memberof markus.mixins
+ *
+ * @example
+ * let containerWithElementMix = new markus.mixins.Display(PIXI.Container);
+ * containerWithElementMix(view, parent, preset, argForParentClass);
  */
 export default function Element(superclass=class{}) {
   return class extends superclass {
     constructor(view, parent, preset, arg) {
       super(arg);
 
+      /**
+       * Root view class
+       * @memberof markus.mixins.Element
+       * @member {markus.View}
+       */
       this.mark = view;
-      this.element = preset.element;
-      this.id = preset.id;
-      this.tags = preset.tags;
-      this.presets = preset.presets;
-      this.parentElement = parent;
-      this.value = preset.value;
 
+      /**
+       * Element name
+       * @memberof markus.mixins.Element
+       * @member {string}
+       */
+      this.element = preset.element;
+
+      /**
+       * Element id
+       * @memberof markus.mixins.Element
+       * @member {string}
+       */
+      this.id = preset.id;
+
+      /**
+       * Element tags
+       * @memberof markus.mixins.Element
+       * @member {string[]}
+       */
+      this.tags = preset.tags;
+
+      /**
+       * Parent node
+       * @memberof markus.mixins.Element
+       * @member {Element}
+       */
+      this.parentElement = parent;
+
+      /**
+       * Childs list
+       * @memberof markus.mixins.Element
+       * @member {Element[]}
+       */
       this.childList = [];
+
+      /**
+       * Аrray of functions called every tick
+       * @memberof markus.mixins.Element
+       * @member {function[]}
+       */
       this.ticks = [];
 
+
+      // set props
       this.mark.get('mixins') && this.mark.get('mixins').merge(this, preset.props);
       this.updateProps(preset.props);
 
+      // add to parent node
       parent && parent.childList.push(this);
       if(this instanceof PIXI.DisplayObject) {
         if(parent instanceof PIXI.DisplayObject) {
@@ -35,6 +81,12 @@ export default function Element(superclass=class{}) {
       }
     }
 
+
+    /**
+     * Set props to element
+     * @memberof markus.mixins.Element
+     * @param props {Object} Props object
+     */
     updateProps(props) {
       for(let key in props) {
         // call custom prop plugins
@@ -72,6 +124,12 @@ export default function Element(superclass=class{}) {
         }
       }
     }
+
+    /**
+     * Set standard property values if they do not value
+     * @memberof markus.mixins.Element
+     * @param props {Object} Props obect
+     */
     defaultProps(props) {
       for(let key in props) {
         if(this[key] === undefined) {
@@ -79,9 +137,21 @@ export default function Element(superclass=class{}) {
         }
       }
     }
+
+    /**
+     * Add function to ticks array
+     * @memberof markus.mixins.Element
+     * @param cb {funciton} Every tick is called
+     */
     addTick(cb) {
       this.ticks.push(cb);
     }
+
+    /**
+     * Main tick method. Each tick is called in view.updateElements
+     * @memberof markus.mixins.Element
+     * @private
+     */
     tick(dt) {
       for(let i = 0; i < this.ticks.length; i++) {
         this.ticks[i](dt);

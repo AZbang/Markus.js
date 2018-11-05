@@ -1,6 +1,12 @@
 import Sprite from './Sprite';
 
 /**
+ * Sprite with button behavior
+ * @example
+ * button(src=button.png)
+ *  &#64;toScene=scene_id
+ *    text | CLICK ME
+ *
  * @class
  * @memberof markus.elements
  * @augments markus.elements.Sprite

@@ -15,9 +15,11 @@
 /**
  * Replaces appW to application width and appH to application height.
  * @memberof markus.propPlugins
- * @name fullsize
+ * @arg el {Element}
+ * @arg key {string}
+ * @arg props {Object}
 */
-export function fullsize(el, key, props) {
+function fullsize(el, key, props) {
   if(props[key] === 'appW') {
     props[key] = el.mark.get('app').width;
   }
@@ -29,11 +31,17 @@ export function fullsize(el, key, props) {
 /**
  * Print prop "consolelog" value to console. Return true
  * @memberof markus.propPlugins
- * @name print
-*/
-export function print(el, key, props) {
+ * @arg el {Element}
+ * @arg key {string}
+ * @arg props {Object}
+ */
+function print(el, key, props) {
   if(key === 'consolelog') {
     window.console.log(props[key]);
     return true;
   }
 }
+
+export {
+  fullsize, print
+};

@@ -1,26 +1,7 @@
-import * as elms from './elements/index';
+import * as elements from './elements/index';
 import * as mixins from './mixins/index';
-import * as plugs from './propPlugins';
+import * as propPlugins from './propPlugins';
 import * as utils from './utils';
-/**
- * @namespace markus
- */
-
-/**
- * All elements
- * @memberof markus
- * @member {Element[]}
- * @static
- */
-const elements = elms;
-
-/**
- * Custom elements props plugins
- * @memberof markus
- * @member {Element[]}
- * @static
- */
-const propPlugins = plugs;
 
 /**
  * Add new elements

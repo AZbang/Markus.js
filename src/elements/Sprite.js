@@ -1,6 +1,10 @@
 import Display from '../mixins/Display';
 
 /**
+ * Implementing PIXI.Sprite for markusJS
+ * @example
+ * sprite(src=image.png)
+ * 
  * @class
  * @mixes markus.mixins.Display
  * @memberof markus.elements
@@ -13,6 +17,11 @@ export default class Sprite extends Display(PIXI.Sprite) {
     this.contentW = this.width;
     this.mark.add(data.presets, this);
   }
+
+  /**
+   * Sprite texture source
+   * @member {string}
+   */
   get src() {
     return this._src;
   }

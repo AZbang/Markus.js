@@ -1,6 +1,16 @@
 import Element from '../mixins/Element';
 
 /**
+ * Scenes Manager for MarkusJS. Children of this element are separate scenes that can be switched.
+ * @example
+ * scenes(scene = A)
+ *   block(id=A)
+ *     text | SCENE A
+ *   block(id=B)
+ *     text | SCENE B
+ *
+ * mark.get('scenes').scene = 'B';
+ *
  * @class
  * @mixes markus.mixins.Element
  * @memberof markus.elements
@@ -9,12 +19,23 @@ import Element from '../mixins/Element';
 export default class Scenes extends Element(PIXI.Container) {
   constructor(view, parent, data) {
     super(view, parent, data);
+
+    /**
+     * Scenes presets
+     * @member {Preset[]}
+     */
+    this.scenes = data.presets;
   }
+
+  /**
+   * Current scene id
+   * @member {string}
+   */
   set scene(id) {
-    for(let i = 0; i < this.presets.length; i++) {
-      if(this.presets[i].id === id) {
+    for(let i = 0; i < this.scenes.length; i++) {
+      if(this.scenes[i].id === id) {
         this._scene && this.mark.remove(this._scene, this);
-        this._scene = this.mark.add(this.presets[i], this);
+        this._scene = this.mark.add(this.scenes[i], this);
       }
     }
   }
