@@ -8,11 +8,11 @@
  *
  * @example
  * let containerWithElementMix = new markus.mixins.Display(PIXI.Container);
- * containerWithElementMix(view, parent, preset, argForParentClass);
+ * containerWithElementMix({view, parent, ...preset}, argForParentClass);
  */
 export default function Element(superclass=class{}) {
   return class extends superclass {
-    constructor(view, parent, preset, arg) {
+    constructor(preset, arg) {
       super(arg);
 
       /**
@@ -20,17 +20,26 @@ export default function Element(superclass=class{}) {
        * @memberof markus.mixins.Element
        * @member {markus.View}
        */
-      this.mark = view;
+      this.mark = preset.view;
 
       /**
        * Element name
+       * @readonly
        * @memberof markus.mixins.Element
        * @member {string}
        */
       this.element = preset.element;
 
       /**
+       * Presets list
+       * @memberof markus.mixins.Element
+       * @member {markus.View}
+       */
+      this.presets = preset.presets;
+
+      /**
        * Element id
+       * @readonly
        * @memberof markus.mixins.Element
        * @member {string}
        */
@@ -41,14 +50,14 @@ export default function Element(superclass=class{}) {
        * @memberof markus.mixins.Element
        * @member {string[]}
        */
-      this.tags = preset.tags;
+      this.tags = preset.tags.slice(0);
 
       /**
        * Parent node
        * @memberof markus.mixins.Element
        * @member {Element}
        */
-      this.parentElement = parent;
+      this.parentElement = preset.parent || preset.view;
 
       /**
        * Childs list
@@ -64,42 +73,73 @@ export default function Element(superclass=class{}) {
        */
       this.ticks = [];
 
+      /**
+       * Element properties from markus markup
+       * @readonly
+       * @memberof markus.mixins.Element
+       * @member {function[]}
+       */
+      this.props = preset.props;
 
-      // set props
-      this.mark.get('mixins') && this.mark.get('mixins').merge(this, preset.props);
-      this.updateProps(preset.props);
+      this._bindToParentNode();
+    }
 
-      // add to parent node
-      parent && parent.childList.push(this);
+    _bindToParentNode() {
+      this.parentElement.childList.push(this);
       if(this instanceof PIXI.DisplayObject) {
-        if(parent instanceof PIXI.DisplayObject) {
-          parent.addChild(this);
+        if(this.parentElement instanceof PIXI.DisplayObject) {
+          this.parentElement.addChild(this);
         }
         else {
-          parent.stage.addChild(this);
+          this.parentElement.stage.addChild(this);
         }
       }
     }
 
+    /**
+     * Add tag to tags list and app mixin props
+     * @memberof markus.mixins.Element
+     * @param props {string} tagName
+     */
+    addTag(tag) {
+      if(this.tags.indexOf(tag) === -1) {
+        this.tags.push(tag);
+      }
+    }
+
+    /**
+     * Remove tag from tags list and reuse mixins props
+     * @memberof markus.mixins.Element
+     * @param props {string} tagName
+     */
+    removeTag(tag) {
+      let index = this.tags.indexOf(tag);
+      if(index !== -1) {
+        this.tags.splice(index, 1);
+      }
+    }
 
     /**
      * Set props to element
      * @memberof markus.mixins.Element
      * @param props {Object} Props object
      */
-    updateProps(props) {
+    setProps(props) {
       for(let key in props) {
         // call custom prop plugins
         // for(let plug in propPlugins) {
-        //   if(this.propPlugins[plug](this, key, props)) {
-        //     continue propsCycle;
+        //   if(propPlugins[plug](this, key, props)) {
+        //     continue propsEach;
         //   }
         // }
 
         // parse events prop
         if(key === 'on' && typeof props[key] === 'object') {
           for(let i = 0; i < props[key].length; i++) {
-            this.on(props[key][i].value, () => this.updateProps(props[key][i]));
+            let event = props[key][i].value;
+            this.on(event, () => {
+              this.setProps(Object.assign(props[key][i]), {value: undefined});
+            });
           }
           return true;
         }
@@ -121,19 +161,6 @@ export default function Element(superclass=class{}) {
         }
         else {
           this[key] = props[key];
-        }
-      }
-    }
-
-    /**
-     * Set standard property values if they do not value
-     * @memberof markus.mixins.Element
-     * @param props {Object} Props obect
-     */
-    defaultProps(props) {
-      for(let key in props) {
-        if(this[key] === undefined) {
-          this.updateProps({[key]: props[key]});
         }
       }
     }

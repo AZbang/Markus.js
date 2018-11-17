@@ -21,47 +21,46 @@ import Display from '../mixins/Display';
  * @augments PIXI.Container
  */
 export default class Block extends Display(PIXI.Container) {
-  constructor(markus, parent, data) {
-    super(markus, parent, data);
+  constructor(preset) {
+    super(preset);
 
-    this.defaultProps({
-      /**
-       * Position items as a inline list.
-       * @memberof {markus.elements.Block}
-       * @member {booleon}
-       */
-      inlineItems: false,
+    /**
+     * Position items as a inline list.
+     * @memberof {markus.elements.Block}
+     * @member {booleon}
+     */
+    this.inlineItems = false;
 
-      /**
-       * Indent by x for elements in inline positioning
-       * @memberof {markus.elements.Block}
-       * @member {number}
-       */
-      itemsMarginX: 0,
+    /**
+     * Indent by x for elements in inline positioning
+     * @memberof {markus.elements.Block}
+     * @member {number}
+     */
+    this.itemsMarginX = 0;
 
-      /**
-       * Indent by y for elements in inline positioning
-       * @memberof {markus.elements.Block}
-       * @member {number}
-       */
-      itemsMarginY: 0,
+    /**
+     * Indent by y for elements in inline positioning
+     * @memberof {markus.elements.Block}
+     * @member {number}
+     */
+    this.itemsMarginY = 0;
 
-      /**
-       * anchor by x positioning the block relative to contentW
-       * @memberof {markus.elements.Block}
-       * @member {number}
-       */
-      anchorX: 0,
+    /**
+     * anchor by x positioning the block relative to contentW
+     * @memberof {markus.elements.Block}
+     * @member {number}
+     */
+    this.anchorX = 0;
 
-      /**
-       * anchor by y positioning the block relative to contentW
-       * @memberof {markus.elements.Block}
-       * @member {number}
-       */
-      anchorY: 0
-    });
+    /**
+     * anchor by y positioning the block relative to contentW
+     * @memberof {markus.elements.Block}
+     * @member {number}
+     */
+    this.anchorY = 0;
 
-    this.mark.add(data.presets, this);
+
+    this.mark.add(this.presets, this);
     this.addTick(() => this._computedBlock());
   }
 

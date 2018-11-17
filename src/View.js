@@ -93,17 +93,27 @@ export default class View {
    * @param [parent=view] {Element} Parent element
    * @returns {Element} Returns added element
    */
-  addPreset(preset, parent=this) {
+  addPreset(preset={}, parent=this) {
     if(preset.type !== 'elementNode') {
       throw Error('Preset cannot be activate. His type is not elementNode');
     }
 
-    let className = preset.element.slice(0, 1).toUpperCase() + preset.element.slice(1);
-    let elm = elements[className] || elements[preset.element];
-    if(!elm) {
+    let elementName = preset.element.slice(0, 1).toUpperCase() + preset.element.slice(1);
+    let elmCtor = elements[elementName] || elements[preset.element];
+
+    if(!elmCtor) {
       throw Error('Element "' + preset.element + '" is not defined');
     }
-    return new elm(this, parent, preset);
+
+    // merge props with mixins
+    let props = preset.props;
+    if(this.get('mixins')) {
+      props = this.get('mixins').merge(preset, preset.props);
+    }
+
+    let elm = new elmCtor(Object.assign(preset, {parent: parent, view: this, props: props}));
+    elm.setProps(elm.props);
+    return elm;
   }
 
 

@@ -34,7 +34,6 @@ mixins
   .label
     @font VT323
     @centerXY
-    @anchor .5
     @scale .5
     @size 61
     @color #fff

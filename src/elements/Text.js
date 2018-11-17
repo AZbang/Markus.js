@@ -14,12 +14,8 @@ import Display from '../mixins/Display';
  * @augments PIXI.Text
  */
 export default class Text extends Display(PIXI.Text) {
-  constructor(view, parent, data) {
-    super(view, parent, data);
-
-    if(this.value) {
-      this.text = this.value;
-    }
+  constructor(preset) {
+    super(preset, preset.value);
   }
 
   /**

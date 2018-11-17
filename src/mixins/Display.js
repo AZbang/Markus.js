@@ -11,30 +11,28 @@ import Element from './Element';
  *
  * @example
  * let containerWithDisplayAndElementMix = new markus.mixins.Display(PIXI.Container);
- * containerWithDisplayAndElementMix(view, parent, preset, argForParentClass);
+ * containerWithDisplayAndElementMix({view, parent, ...preset}, argForParentClass);
  */
 export default function Display(superclass) {
   return class extends Element(superclass) {
-    constructor(view, parent, data, arg) {
-      super(view, parent, data, arg);
+    constructor(preset, arg) {
+      super(preset, arg);
 
-      let app = this.mark.get('app');
-      this.defaultProps({
-        /**
-         * The width of the area of allowable positions children of the element
-         * @member {number}
-         * @memberof markus.mixins.Display
-         */
-        contentW: app.width,
+      const app = this.mark.get('app');
 
-        /**
-         * The height of the area of allowable positions children of the element
-         * @member {number}
-         * @memberof markus.mixins.Display
-         */
-        contentH: app.height
-      });
+      /**
+       * The width of the area of allowable positions children of the element
+       * @member {number}
+       * @memberof markus.mixins.Display
+       */
+      this.contentW = app.width;
 
+      /**
+       * The height of the area of allowable positions children of the element
+       * @member {number}
+       * @memberof markus.mixins.Display
+       */
+      this.contentH = app.height;
 
       this.addTick(() => this._computedPosition());
     }

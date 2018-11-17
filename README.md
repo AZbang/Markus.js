@@ -40,8 +40,3 @@ element.tag#id2
   | MULTILINE TEXT
   childElement.tag#id3(angle = 35)
 ```
-
-# Basic docs
-* **[markus.View](docs/View.md)**
-* **[markus.Parser](docs/Parser.md)**
-* **[markus.Elements](docs/Elements.md)**

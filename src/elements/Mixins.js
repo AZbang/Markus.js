@@ -16,14 +16,14 @@ import Element from '../mixins/Element';
  * @memberof markus.elements
  */
 export default class Mixins extends Element() {
-  constructor(mark, root, data) {
-    super(mark, root, data);
+  constructor(preset) {
+    super(preset);
 
     /**
-     * Mixins array
+     * Mixins array.
      * @member {Object[]}
      */
-    this.mixins = data.presets;
+    this.mixins = this.presets;
   }
 
   /**
@@ -33,19 +33,20 @@ export default class Mixins extends Element() {
    * @returns {Object} merged elm props with mixin props
    */
   merge(elm, props={}) {
+    let parseProps = {};
     for(let i = 0; i < this.mixins.length; i++) {
       if(this.mark.isSelectorOfElement(this.mixins[i], elm)) {
         for(let key in this.mixins[i].props) {
           if(Array.isArray(props[key])) {
-            props[key] = props[key].concat(this.mixins[i].props[key]);
+            parseProps[key] = props[key].concat(this.mixins[i].props[key]);
           }
           else {
-            props[key] = this.mixins[i].props[key];
+            parseProps[key] = this.mixins[i].props[key];
           }
         }
       }
     }
-    return props;
+    return Object.assign({}, props, parseProps);
   }
 
   /**

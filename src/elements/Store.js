@@ -13,15 +13,13 @@ import Element from '../mixins/Element';
  * @memberof markus.elements
  */
 export default class Store extends Element() {
-  constructor(mark, parent, data) {
-    // A small "trick" that the superclass Element didn't parse the preset properties directly to the Store class
-    let props = data.props;
-    data.props = {};
-    super(mark, parent, data);
+  constructor(preset) {
+    super(preset);
 
-    for(let key in props) {
-      this.set(key, props[key]);
+    for(let key in this.props) {
+      this.set(key, this.props[key]);
     }
+    this.props = {};
   }
 
   /**

@@ -17,18 +17,18 @@ import Element from '../mixins/Element';
  * @augments PIXI.Container
  */
 export default class Scenes extends Element(PIXI.Container) {
-  constructor(view, parent, data) {
-    super(view, parent, data);
+  constructor(preset) {
+    super(preset);
 
     /**
      * Scenes presets
      * @member {Preset[]}
      */
-    this.scenes = data.presets;
+    this.scenes = this.presets;
   }
 
   /**
-   * Current scene id
+   * Editable prop. Current scene id
    * @member {string}
    */
   set scene(id) {

@@ -18,18 +18,12 @@ import Element from '../mixins/Element';
  * @augments PIXI.Application
  */
 export default class App extends Element(PIXI.Application) {
-  constructor(view, parent, data) {
-    super(view, parent, data, {
+  constructor(preset) {
+    super(preset, {
       width: window.innerWidth,
       height: window.innerHeight,
       sharedTicker: false,
       sharedLoader: false
-    });
-
-    this.defaultProps({
-      smooth: true,
-      width: 1920,
-      height: 1080
     });
 
     /**
@@ -38,10 +32,12 @@ export default class App extends Element(PIXI.Application) {
      */
     this.resolution = null;
 
+    this.width = 1920;
+    this.height = 1080;
 
     document.body.appendChild(this.view);
     document.body.style = 'padding: 0; margin: 0; overflow: hidden; background: #000;';
-    window.addEventListener('resize', () => this.resize(this));
+    window.addEventListener('resize', () => this._resize(this));
   }
 
   /**
@@ -55,7 +51,6 @@ export default class App extends Element(PIXI.Application) {
     return this.renderer.backgroundColor;
   }
 
-
   /**
    * Smooth textures in pixi
    * @member {bolleon}
@@ -67,14 +62,13 @@ export default class App extends Element(PIXI.Application) {
     PIXI.settings.SCALE_MODE = v ? PIXI.SCALE_MODES.LINEAR : PIXI.SCALE_MODES.NEAREST;
   }
 
-
   /**
    * Width game view
    * @member {number}
    */
   set width(v) {
     this._width = v;
-    this.resize();
+    this._resize();
   }
   get width() {
     return this._width;
@@ -86,13 +80,13 @@ export default class App extends Element(PIXI.Application) {
    */
   set height(v) {
     this._height = v;
-    this.resize();
+    this._resize();
   }
   get height() {
     return this._height;
   }
 
-  resize() {
+  _resize() {
     this.resolution = window.innerWidth/this.width;
     this.renderer.resize(window.innerWidth, this.height*this.resolution);
     this.view.style.marginTop = window.innerHeight/2-this.height*this.resolution/2 + 'px';
