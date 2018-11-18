@@ -118,8 +118,7 @@ export default class Parser {
                 throw Error('valueNode cannot be a child of a ' + parent.type);
               }
             }
-
-            if(child.type === 'propNode') {
+            else if(child.type === 'propNode') {
               if(parent.type === 'propNode') {
                 if(typeof parent.value === 'string') {
                   parent.directory = parent.value;
@@ -215,10 +214,19 @@ export default class Parser {
    * parser.parsePreset('  @prop .3324')
    * > {
    *   depth: 1,
-   *   attrType: 'prop'
    *   type: 'propNode',
+   *   typeAttr: 'prop',
    *   name: 'prop',
    *   value: 0.3324
+   * }
+   *
+   * parser.parsePreset('  @move(10, 30)')
+   * > {
+   *   depth: 1,
+   *   type: 'propNode',
+   *   typeAttr: 'method',
+   *   name: 'move',
+   *   args: [10, 30]
    * }
    */
   parsePreset(line) {
@@ -230,8 +238,7 @@ export default class Parser {
     // if line is attr node
     let attr = this.getAttr(line);
     if(attr) {
-      type = 'propNode';
-      return {type, depth, name: attr[1], value: attr[2], attrType: attr[0]};
+      return {type: 'propNode', depth, name: attr[1], value: attr[2], typeAttr: attr[0]};
     }
 
     // else line is element, empty or value node
@@ -422,16 +429,25 @@ export default class Parser {
    * @returns {string[]} attr from markline. [attrType, attrNane, attrValue]
    *
    * @example
-   * parser.getAttr("@attr on")
-   * > ['prop', "attr", true]
+   * parser.getAttr("@prop on")
+   * > ['propNode', "prop", true]
+   *
+   * parser.getAttr("@func(on, 20, text)")
+   * > ['propNode', "attr", [true, 20, 'text']]
    */
   getAttr(line) {
-    let prop = line.match(/^[\t ]*\@(\w+)(\s(.+))?/);
-    if(!prop) {
-      return;
+    let func = line.match(/^[\t ]*\@(\w+)\((.+)?\)/);
+    if(func) {
+      let args = func[2] != null ? func[2].split(/,\s+/).map(v => this.parseValue(v)) : [];
+      return ['method', func[1], function() {
+        this[func[1]].apply(this, args);
+      }];
     }
 
-    return ['prop', prop[1], prop[3] != null ? this.parseValue(prop[3]) : true];
+    let prop = line.match(/^[\t ]*\@(\w+)(\s(.+))?/);
+    if(prop) {
+      return ['prop', prop[1], prop[3] != null ? this.parseValue(prop[3]) : true];
+    }
   }
 
   /**

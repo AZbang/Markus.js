@@ -19,3 +19,5 @@ app(color=0x468754, width=1280, height=720)
       @buttonMode on
       @interactive on
       @speed .1
+      @on pointertap
+        @addSpeed(1)

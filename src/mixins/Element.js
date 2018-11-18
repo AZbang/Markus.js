@@ -133,9 +133,14 @@ export default function Element(superclass=class{}) {
         //   }
         // }
         //
+        //
+
+        if(typeof props[key] === 'function') {
+          props[key].call(this);
+        }
 
         // parse events prop
-        if(key === 'on' && typeof props[key] === 'object') {
+        else if(key === 'on' && typeof props[key] === 'object') {
           for(let event in props[key]) {
             this.on(event, () => {
               this.setProps(props[key][event]);
