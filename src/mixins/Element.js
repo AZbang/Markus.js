@@ -132,33 +132,35 @@ export default function Element(superclass=class{}) {
         //     continue propsEach;
         //   }
         // }
+        //
 
         // parse events prop
         if(key === 'on' && typeof props[key] === 'object') {
-          for(let i = 0; i < props[key].length; i++) {
-            let event = props[key][i].value;
+          for(let event in props[key]) {
             this.on(event, () => {
-              this.setProps(Object.assign(props[key][i]), {value: undefined});
+              this.setProps(props[key][event]);
             });
           }
-          return true;
         }
 
-        // parse object prop and points
-        else if(typeof this[key] === 'object' && this[key] != null) {
+        else if(Array.isArray(this[key])) {
+          this[key] = this[key].concat(props[key]);
+        }
+
+        else if(typeof this[key] === 'object' && this[key] != null && this[key].set) {
           if(typeof props[key] === 'object') {
-            Object.assign(this[key], props[key]);
+            this[key].x = props[key].x;
+            this[key].y = props[key].y;
           }
-          else if(this[key].set) {
+          else {
             this[key].set(props[key]);
           }
-          if(props[key + 'X']) {
-            this[key].x = props[key + 'X'];
-          }
-          if(props[key + 'Y']) {
-            this[key].y = props[key + 'Y'];
-          }
         }
+
+        else if(typeof this[key] === 'object' && this[key] != null && typeof props[key] === 'object') {
+          Object.assign(this[key], props[key]);
+        }
+
         else {
           this[key] = props[key];
         }

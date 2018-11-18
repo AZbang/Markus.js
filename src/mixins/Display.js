@@ -18,21 +18,21 @@ export default function Display(superclass) {
     constructor(preset, arg) {
       super(preset, arg);
 
-      const app = this.mark.get('app');
+      this.app = this.mark.get('app');
 
       /**
        * The width of the area of allowable positions children of the element
        * @member {number}
        * @memberof markus.mixins.Display
        */
-      this.contentW = app.width;
+      this.contentW = this.app.width;
 
       /**
        * The height of the area of allowable positions children of the element
        * @member {number}
        * @memberof markus.mixins.Display
        */
-      this.contentH = app.height;
+      this.contentH = this.app.height;
 
       this.addTick(() => this._computedPosition());
     }
@@ -168,8 +168,8 @@ export default function Display(superclass) {
     }
 
     _computedPosition() {
-      let w = this.parentElement.contentW || this.mark.get('app').width;
-      let h = this.parentElement.contentH || this.mark.get('app').height;
+      let w = this.parentElement.contentW || this.app.width;
+      let h = this.parentElement.contentH || this.app.height;
 
       if(this.left != null) {
         this.x = this.left;
@@ -192,8 +192,8 @@ export default function Display(superclass) {
       }
 
       if(this.parentElement.anchor) {
-        this.x -= w*this.parentElement.anchor.x;
-        this.y -= h*this.parentElement.anchor.y;
+        this.x = this.x-w*this.parentElement.anchor.x;
+        this.y = this.y-h*this.parentElement.anchor.y;
       }
     }
   };

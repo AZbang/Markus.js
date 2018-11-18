@@ -12,30 +12,30 @@ mixins
   button
     @scale 2
     @anchor .5
-
-    $on pointerout
+    @on pointerout
       @alpha 1
-
-    $on pointerover
+    @on pointerover
       @alpha .8
 
   button.long
-    $on pointerdown
+    @on pointerdown
       @src buttonLong_blue_pressed.png
-    $on pointerup
+
+    @on pointerup
       @src buttonLong_blue.png
 
   button.short
-    $on pointerdown
+    @on pointerdown
       @src buttonSquare_blue_pressed.png
-    $on pointerup
+
+    @on pointerup
       @src buttonSquare_blue.png
 
   .label
     @font VT323
     @centerXY
-    @scale .5
-    @size 61
+    @size 32
+    @anchor .5
     @color #fff
 
 resources

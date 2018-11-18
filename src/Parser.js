@@ -121,22 +121,32 @@ export default class Parser {
 
             if(child.type === 'propNode') {
               if(parent.type === 'propNode') {
-                if(typeof parent.value !== 'object') {
-                  parent.value = {value: parent.value};
+                if(typeof parent.value === 'string') {
+                  parent.directory = parent.value;
+                  parent.value = {[parent.value]: {[child.name]: child.value}};
                 }
-                Object.assign(parent.value, {[child.name]: child.value});
+                else if(parent.directory) {
+                  Object.assign(parent.value[parent.directory], {[child.name]: child.value});
+                }
+                else if(typeof parent.value === 'object' && parent.value != null) {
+                  Object.assign(parent.value, {[child.name]: child.value});
+                }
+                else {
+                  parent.value = {value: parent.value, [child.name]: child.value};
+                }
               }
               else if(parent.type === 'elementNode') {
-                if(child.attrType === 'only') {
-                  Object.assign(parent.props, {[child.name]: child.value});
+                if(Array.isArray(parent.props[child.name])) {
+                  parent.props[child.name].push(child.value);
                 }
-                else if(child.attrType === 'multiple') {
-                  if(parent.props[child.name]) {
-                    parent.props[child.name].push(child.value);
-                  }
-                  else {
-                    parent.props[child.name] = [child.value];
-                  }
+                else if(typeof parent.props[child.name] === 'object') {
+                  Object.assign(parent.props[child.name], child.value);
+                }
+                else if(parent.props[child.name]) {
+                  parent.props[child.name] = [parent.props[child.name], child.value];
+                }
+                else {
+                  parent.props[child.name] = child.value;
                 }
               }
               else {
@@ -205,16 +215,7 @@ export default class Parser {
    * parser.parsePreset('  @prop .3324')
    * > {
    *   depth: 1,
-   *   attrType: 'only'
-   *   type: 'propNode',
-   *   name: 'prop',
-   *   value: 0.3324
-   * }
-   *
-   * parser.parsePreset('  $prop .3324')
-   * > {
-   *   depth: 1,
-   *   attrType: 'multiple'
+   *   attrType: 'prop'
    *   type: 'propNode',
    *   name: 'prop',
    *   value: 0.3324
@@ -422,18 +423,15 @@ export default class Parser {
    *
    * @example
    * parser.getAttr("@attr on")
-   * > ['only', "attr", true]
-   * parser.getAttr("$attr off")
-   * > ['multiple', "attr", false]
+   * > ['prop', "attr", true]
    */
   getAttr(line) {
-    let prop = line.match(/^[\t ]*([\@\$])(\w+)(\s(.+))?/);
+    let prop = line.match(/^[\t ]*\@(\w+)(\s(.+))?/);
     if(!prop) {
       return;
     }
 
-    let type = prop[1] === '@' ? 'only' : 'multiple';
-    return [type, prop[2], prop[4] != null ? this.parseValue(prop[4]) : true];
+    return ['prop', prop[1], prop[3] != null ? this.parseValue(prop[3]) : true];
   }
 
   /**
