@@ -1,6 +1,6 @@
 {
   "name": "markusjs",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "The framework for creating declarative interfaces based on pixi.js",
   "license": "MIT",
   "main": "./lib/markus.js",
@@ -25,8 +25,7 @@
     "dev": "http-server . -o -c-1",
     "postversion": "npm run build",
     "postpublish": "npm run deploy",
-    "predeploy": "npm run copy && npm run docs",
-    "copy": "copyfiles -f \"node_modules/{pixi.js}/dist/*.{js,map}\" examples/lib",
+    "predeploy": "npm run docs",
     "deploy": "gh-pages -d . -s \"{examples,docs,lib}/**\"",
     "start": "parallelshell \"npm run watch\" \"npm run dev\""
   },
